@@ -1,7 +1,8 @@
 import { ADD_SPEND } from "./actionsConsts"
 
-export const addSpend = () => {
+export const addSpend = (data) => {
   return {
-    type: ADD_SPEND
+    type: ADD_SPEND,
+    payload: data
   }
 }

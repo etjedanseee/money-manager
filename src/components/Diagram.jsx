@@ -1,26 +1,31 @@
 import React from 'react'
 import { Doughnut } from 'react-chartjs-2'
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
+import Categories from './Categories';
 
-const Diagram = ({ sortedCategories, sortedTotalSum, colors }) => {
+const Diagram = ({ sortedCategories, sortedColors, sortedTotalSum }) => {
   ChartJS.register(ArcElement, Tooltip, Legend);
 
-  const data = {
+  const doughnutConfig = {
     datasets: [{
       label: 'money spent',
       data: sortedTotalSum,
-      //как то формировать цвета(возможно случайно)
-      backgroundColor: colors,
-      borderColor: colors,
+      backgroundColor: sortedColors,
+      borderColor: sortedColors,
       borderWidth: 1,
     }]
   }
 
-  // console.log('data', data)
-
   return (
-    <div className='h-60  flex items-center'>
-      <Doughnut data={data} />
+    <div className='relative flex justify-center items-center'>
+      <div className='grid grid-cols-4 grid-rows-4 grid-flow-row-dense gap-2'>
+        <Categories
+          sortedCategories={sortedCategories}
+          sortedColors={sortedColors}
+          sortedTotalSum={sortedTotalSum}
+        />
+        <div key='doughnut' className='h-60 col-start-2 col-end-4 row-start-2 row-end-4'><Doughnut data={doughnutConfig} /></div>
+      </div>
     </div>
   )
 }
