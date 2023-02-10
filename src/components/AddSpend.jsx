@@ -4,7 +4,7 @@ import { addSpend } from '../redux/actions/moneyActions'
 import Calculator from './Calculator'
 import PayWith from './PayWith'
 
-const AddSpend = ({ isAddSpendVisible, setIsAddSpendVidible, category }) => {
+const AddSpend = ({ setIsAddSpendVidible, category }) => {
   const [spendValue, setSpendValue] = useState('0')
   const [invoice, setInvoice] = useState('Cash')
   const [isPayWithVisible, setIsPayWithVisible] = useState(false)
@@ -39,7 +39,6 @@ const AddSpend = ({ isAddSpendVisible, setIsAddSpendVidible, category }) => {
       payWith: invoice,
       category
     }
-    //добавить снятие денег с выбранного счета
     if (spendValue !== '0') {
       dispatch(addSpend(obj))
       setSpendValue('0')
@@ -48,7 +47,7 @@ const AddSpend = ({ isAddSpendVisible, setIsAddSpendVidible, category }) => {
   }
 
   return (
-    <div className={`${isAddSpendVisible ? 'b-0 ' : ' bottom-full '}  absolute min-h-screen w-full bg-black bg-opacity-80 flex flex-col justify-end`}>
+    <div className={`absolute top-0 min-h-screen w-full bg-black bg-opacity-80 flex flex-col justify-end`}>
       <div className='bg-white flex flex-col items-center'>
         <div className='flex justify-between  w-full text-white'>
           <div

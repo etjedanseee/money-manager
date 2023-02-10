@@ -27,7 +27,7 @@ const Categories = ({ sortedCategories, sortedColors, sortedTotalSum }) => {
           </div>
         </div>
       ))}
-      <AddSpend isAddSpendVisible={isAddSpendVisible} setIsAddSpendVidible={setIsAddSpendVidible} category={currentCategory} />
+      {isAddSpendVisible && <AddSpend setIsAddSpendVidible={setIsAddSpendVidible} category={currentCategory} />}
     </>
   )
 }
