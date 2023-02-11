@@ -2,17 +2,17 @@ import React, { useState } from 'react'
 import AddSpend from './AddSpend'
 
 const Categories = ({ sortedCategories, sortedColors, sortedTotalSum }) => {
-  const [isAddSpendVisible, setIsAddSpendVidible] = useState(false)
+  const [isAddSpendVisible, setIsAddSpendVisible] = useState(false)
   const [currentCategory, setCurrentCategory] = useState('Cafe')
 
   const onCategoryClick = (category) => {
     setCurrentCategory(category)
-    setIsAddSpendVidible(true)
+    setIsAddSpendVisible(true)
   }
 
   return (
     <>
-      {sortedCategories?.map((c, i) => (
+      {sortedCategories?.length && sortedCategories?.map((c, i) => (
         <div
           key={c}
           className='place-self-center flex flex-col justify-center items-center'
@@ -27,7 +27,7 @@ const Categories = ({ sortedCategories, sortedColors, sortedTotalSum }) => {
           </div>
         </div>
       ))}
-      {isAddSpendVisible && <AddSpend setIsAddSpendVidible={setIsAddSpendVidible} category={currentCategory} />}
+      {isAddSpendVisible && <AddSpend setIsAddSpendVisible={setIsAddSpendVisible} category={currentCategory} />}
     </>
   )
 }

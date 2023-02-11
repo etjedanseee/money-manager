@@ -2,24 +2,20 @@ import React, { useState } from 'react'
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 
-const CalendarFC = ({ selectRange = false, handleIsCalendarVisible }) => {
-  const [date, setDate] = useState(new Date());
-  // console.log(date)
+const CalendarFC = ({ isSelectRange, handleIsCalendarVisible }) => {
+  const [date, setDate] = useState(new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate()));
 
   const sendDate = () => {
-    handleIsCalendarVisible()
-    //тут лежит готовая дата
-    console.log('SEND DATA', date)
+    handleIsCalendarVisible(new Date(date.getFullYear(), date.getMonth(), date.getDate()))
   }
 
   return (
     <div className='absolute top-0 left-0 px-6 h-screen w-full bg-black bg-opacity-90 flex items-center justify-center'>
       <div className='bg-white text-black flex flex-col items-center'>
         <Calendar
-          // activeStartDate={new Date(2017, 0, 1)}
-          defaultValue={new Date()}
           showNeighboringMonth={false}
-          selectRange={selectRange}
+          selectRange={isSelectRange}
+          maxDate={new Date()}
           className='text-center'
           onChange={setDate}
           value={date}

@@ -4,10 +4,12 @@ import { addSpend } from '../redux/actions/moneyActions'
 import Calculator from './Calculator'
 import PayWith from './PayWith'
 
-const AddSpend = ({ setIsAddSpendVidible, category }) => {
+const AddSpend = ({ setIsAddSpendVisible, category }) => {
   const [spendValue, setSpendValue] = useState('0')
   const [invoice, setInvoice] = useState('Cash')
   const [isPayWithVisible, setIsPayWithVisible] = useState(false)
+  const [isCalendarVisible, setIsCalendarVisible] = useState(false)
+
   const payWithArr = useSelector(state => state.money.money)
 
   const dispatch = useDispatch()
@@ -33,17 +35,18 @@ const AddSpend = ({ setIsAddSpendVidible, category }) => {
     setIsPayWithVisible(false)
   }
 
-  const addNewSpent = () => {
+  const addNewSpent = (date) => {
     const obj = {
       sum: parseInt(spendValue),
       payWith: invoice,
-      category
+      category,
+      date
     }
     if (spendValue !== '0') {
       dispatch(addSpend(obj))
       setSpendValue('0')
     }
-    setIsAddSpendVidible(false)
+    setIsAddSpendVisible(false)
   }
 
   return (
@@ -63,8 +66,20 @@ const AddSpend = ({ setIsAddSpendVidible, category }) => {
           </div>
         </div>
         <div className='py-3 text-[#ff4181] text-2xl font-medium'>{spendValue}$</div>
-        {isPayWithVisible && <PayWith payWithArr={payWithArr} invoice={invoice} handleInvoiceChoose={handleInvoiceChoose} />}
-        <Calculator spendValue={spendValue} handleSpendValue={handleSpendValue} addNewSpent={addNewSpent} />
+        {isPayWithVisible && (
+          <PayWith
+            payWithArr={payWithArr}
+            invoice={invoice}
+            handleInvoiceChoose={handleInvoiceChoose}
+          />
+        )}
+        <Calculator
+          spendValue={spendValue}
+          handleSpendValue={handleSpendValue}
+          addNewSpent={addNewSpent}
+          setIsCalendarVisible={setIsCalendarVisible}
+          isCalendarVisible={isCalendarVisible}
+        />
       </div>
     </div>
   )

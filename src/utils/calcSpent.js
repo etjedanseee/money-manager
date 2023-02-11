@@ -1,23 +1,41 @@
-export const calcAll = (spent, categories) => {
+export const calcAll = (spent, categories, selectedDate) => {
   const spentArr = [];
-
-  for (let categ in categories) {
-    let categSum = 0;
-    for (let date in spent[categ]) {
-      let dateSum = 0;
-      for (let operation of spent[categ][date]) {
-        dateSum += operation.sum
+  if (selectedDate.length > 0) {
+    const startDate = selectedDate[0];
+    const endDate = selectedDate[1];
+    for (let categ in categories) {
+      let categSum = 0;
+      for (let date in spent[categ]) {
+        let dateSum = 0;
+        const parsedDate = new Date(Date.parse(date));
+        if ((parsedDate < startDate) || (parsedDate > endDate)) {
+          continue
+        }
+        for (let operation of spent[categ][date]) {
+          dateSum += operation.sum
+        }
+        categSum += dateSum;
       }
-      categSum += dateSum;
+      spentArr.push({ category: categ, sum: categSum, color: categories[categ] })
     }
-    spentArr.push({ category: categ, sum: categSum, color: categories[categ] })
+  } else {
+    for (let categ in categories) {
+      let categSum = 0;
+      for (let date in spent[categ]) {
+        let dateSum = 0;
+        const parsedDate = new Date(Date.parse(date));
+        if (+parsedDate !== +selectedDate) {
+          continue
+        }
+        for (let operation of spent[categ][date]) {
+          dateSum += operation.sum
+        }
+        categSum += dateSum;
+      }
+      spentArr.push({ category: categ, sum: categSum, color: categories[categ] })
+    }
   }
   return sortData(spentArr)
-}
-
-//считать все между датами
-export const calcIntervalDate = (spent, categories, startDate, endDate) => {
-
 }
 
 const sortData = (spentArr) => {
@@ -31,6 +49,5 @@ const sortData = (spentArr) => {
     sortedSum[i] = sortedSpentArr[i].sum
     sortedColors[i] = sortedSpentArr[i].color
   }
-  // console.log([sortedCategories, sortedColors, sortedSum])
   return [sortedCategories, sortedColors, sortedSum]
 }

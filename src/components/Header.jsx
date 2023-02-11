@@ -2,17 +2,30 @@ import React, { useState } from 'react'
 import Balance from './Balance'
 import CalendarFC from './CalendarFC'
 import SelectDate from './SelectDate'
+import { setSelectedDate, setTypeDateName } from '../redux/actions/dateActions';
+import { useDispatch } from 'react-redux';
 
-const Header = ({ money, selectedDate }) => {
+
+const Header = ({ money, typeDateName }) => {
   const [isSelectDateVisible, setIsSelectDateVisible] = useState(false)
   const [isCalendarVisible, setIsCalendarVisible] = useState(false)
+  const [isSelectRange, setIsSelectRange] = useState(false)
+  const dispatch = useDispatch()
 
   const handleIsSelectDateVisible = () => {
     setIsSelectDateVisible(prev => !prev)
   }
-
-  const handleIsCalendarVisible = () => {
+  const handleIsCalendarVisible = (date) => {
     setIsCalendarVisible(prev => !prev)
+    if (date) {
+      if (date.length > 0) {
+        const [d1, d2] = date
+        dispatch(setTypeDateName(`${d1.toDateString()} - ${d2.toDateString()}`))
+      } else {
+        dispatch(setTypeDateName(`${date.toDateString()}`))
+      }
+      dispatch(setSelectedDate(date))
+    }
   }
 
   return (
@@ -28,17 +41,18 @@ const Header = ({ money, selectedDate }) => {
         onClick={handleIsSelectDateVisible}
         className='flex justify-center'
       >
-        {selectedDate}
+        {typeDateName}
       </div>
       {isSelectDateVisible && (
         <SelectDate
           handleIsCalendarVisible={handleIsCalendarVisible}
           handleIsSelectDateVisible={handleIsSelectDateVisible}
+          setIsSelectRange={setIsSelectRange}
         />
       )}
-      {isCalendarVisible && <CalendarFC handleIsCalendarVisible={handleIsCalendarVisible} />}
+      {isCalendarVisible && <CalendarFC handleIsCalendarVisible={handleIsCalendarVisible} isSelectRange={isSelectRange} />}
     </div>
   )
-}
 
+}
 export default Header
