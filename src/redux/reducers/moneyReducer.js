@@ -1,21 +1,22 @@
 import { dateToString } from "../../utils/calcDate"
-import { ADD_SPEND, SET_SORTED_SPENT } from "../actions/actionsConsts"
+import { ADD_SPEND, SET_FILTER_INVOICE_BY, SET_SORTED_SPENT } from "../actions/actionsConsts"
 
 const initialState = {
-  money: { Cash: 10000, Card: 5000 },
+  invoice: { Cash: 3000, Card: 5000, CardX: 1000 },
+  filterInvoiceBy: 'All invoice',
   categories: { Food: 'rgb(166,236,255)', Rest: 'rgb(40,255,36)', Housing: 'rgb(67,46,255)', Health: 'rgb(23,255,210)', Cafe: 'rgb(255,93,69)', Cloth: 'rgb(132,85,255)', Pets: 'rgb(1,254,1)', Gifts: 'rgb(187,255,35)', Relations: 'rgb(255,101,85)', Taxi: 'rgb(234,77,255)' },
   spent: {
     Taxi: {
       [dateToString(new Date(2023, 0, 5))]: [
         { sum: 100, payWith: 'Cash', date: new Date(2023, 1, 5) },
-        { sum: 50, payWith: 'Cash', date: new Date(2023, 1, 5) }
+        { sum: 50, payWith: 'Card', date: new Date(2023, 1, 5) }
       ],
       [dateToString(new Date(2023, 0, 21))]: [
         { sum: 5, payWith: 'Cash', date: new Date(2023, 1, 21) },
-        { sum: 45, payWith: 'Cash', date: new Date(2023, 1, 21) }
+        { sum: 45, payWith: 'Card', date: new Date(2023, 1, 21) }
       ],
       [dateToString(new Date(2023, 1, 10))]: [
-        { sum: 10, payWith: 'Cash', date: new Date(2023, 2, 10) },
+        { sum: 10, payWith: 'CardX', date: new Date(2023, 2, 10) },
         { sum: 40, payWith: 'Cash', date: new Date(2023, 2, 10) }
       ],
       [dateToString(new Date(2023, 1, 3))]: [
@@ -25,11 +26,11 @@ const initialState = {
     Food: {
       [dateToString(new Date(2023, 1, 5))]: [
         { sum: 30, payWith: 'Cash', date: new Date(2023, 2, 5) },
-        { sum: 150, payWith: 'Cash', date: new Date(2023, 2, 5) }
+        { sum: 150, payWith: 'Card', date: new Date(2023, 2, 5) }
       ],
       [dateToString(new Date(2023, 1, 3))]: [
         { sum: 10, payWith: 'Cash', date: new Date(2023, 2, 3) },
-        { sum: 100, payWith: 'Cash', date: new Date(2023, 2, 3) }
+        { sum: 100, payWith: 'CardX', date: new Date(2023, 2, 3) }
       ]
     },
   },
@@ -56,9 +57,9 @@ export const moneyReducer = (state = initialState, action) => {
             ...state.spent,
             [action.payload.category]: { ...state.spent[[action.payload.category]], [dateToString(date)]: newArr }
           },
-          money: {
-            ...state.money,
-            [action.payload.payWith]: state.money[action.payload.payWith] - action.payload.sum
+          invoice: {
+            ...state.invoice,
+            [action.payload.payWith]: state.invoice[action.payload.payWith] - action.payload.sum
           }
         }
       } else {
@@ -68,9 +69,9 @@ export const moneyReducer = (state = initialState, action) => {
             ...state.spent,
             [action.payload.category]: { ...state.spent[[action.payload.category]], [dateToString(date)]: [newSpent] }
           },
-          money: {
-            ...state.money,
-            [action.payload.payWith]: state.money[action.payload.payWith] - action.payload.sum
+          invoice: {
+            ...state.invoice,
+            [action.payload.payWith]: state.invoice[action.payload.payWith] - action.payload.sum
           }
         }
       }
@@ -81,6 +82,12 @@ export const moneyReducer = (state = initialState, action) => {
         sortedCategories: action.payload[0],
         sortedColors: action.payload[1],
         sortedTotalSum: action.payload[2],
+      }
+    }
+    case SET_FILTER_INVOICE_BY: {
+      return {
+        ...state,
+        filterInvoiceBy: action.payload
       }
     }
     default: return state

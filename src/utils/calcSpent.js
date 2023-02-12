@@ -1,4 +1,4 @@
-export const calcAll = (spent, categories, selectedDate) => {
+export const calcAll = (spent, categories, selectedDate, filterInvoiceBy) => {
   const spentArr = [];
   if (selectedDate.length > 0) {
     const startDate = selectedDate[0];
@@ -12,7 +12,11 @@ export const calcAll = (spent, categories, selectedDate) => {
           continue
         }
         for (let operation of spent[categ][date]) {
-          dateSum += operation.sum
+          if (filterInvoiceBy === 'All invoice') {
+            dateSum += operation.sum
+          } else if (operation.payWith === filterInvoiceBy) {
+            dateSum += operation.sum
+          }
         }
         categSum += dateSum;
       }
@@ -28,7 +32,11 @@ export const calcAll = (spent, categories, selectedDate) => {
           continue
         }
         for (let operation of spent[categ][date]) {
-          dateSum += operation.sum
+          if (filterInvoiceBy === 'All invoice') {
+            dateSum += operation.sum
+          } else if (operation.payWith === filterInvoiceBy) {
+            dateSum += operation.sum
+          }
         }
         categSum += dateSum;
       }

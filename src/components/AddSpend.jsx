@@ -7,13 +7,12 @@ import PayWith from './PayWith'
 
 const AddSpend = ({ setIsAddSpendVisible, category }) => {
   const [spendValue, setSpendValue] = useState('0')
-  const [invoice, setInvoice] = useState('Cash')
+  const [currentInvoice, setCurrentInvoice] = useState('Cash')
   const [isPayWithVisible, setIsPayWithVisible] = useState(false)
   const [isCalendarVisible, setIsCalendarVisible] = useState(false)
   const [description, setDescription] = useState('')
 
-
-  const payWithArr = useSelector(state => state.money.money)
+  const invoice = useSelector(state => state.money.invoice)
 
   const dispatch = useDispatch()
 
@@ -34,14 +33,14 @@ const AddSpend = ({ setIsAddSpendVisible, category }) => {
   }
 
   const handleInvoiceChoose = (invoice) => {
-    setInvoice(invoice)
+    setCurrentInvoice(invoice)
     setIsPayWithVisible(false)
   }
 
   const addNewSpent = (date) => {
     const obj = {
       sum: parseInt(spendValue),
-      payWith: invoice,
+      payWith: currentInvoice,
       category,
       date,
       description
@@ -65,28 +64,29 @@ const AddSpend = ({ setIsAddSpendVisible, category }) => {
       onClick={e => closeAddSpend(e)}
     >
       <div className='bg-white flex flex-col items-center'>
-        <div className='flex justify-between w-full text-white'>
+        <div className='flex justify-between w-full text-white mb-3'>
           <div
             className='bg-[#5c6bc0] flex-1 px-4 py-2'
             onClick={handlePayWithVisible}
           >
             <div className='text-xs'>From the invoice</div>
-            <div className='text-xl tracking-wide'>{invoice}</div>
+            <div className='text-xl tracking-wide'>{currentInvoice}</div>
           </div>
           <div className='bg-[#fd4180] flex-1 px-4 py-2'>
             <div className='text-xs'>To category</div>
             <div className='text-xl tracking-wide'>{category}</div>
           </div>
         </div>
-        <div className='py-3 text-[#ff4181] text-2xl font-medium'>{spendValue}$</div>
+        <div className='mb-2 text-[#ff4181] text-2xl font-medium'>{spendValue}$</div>
 
         <AddDescription description={description} setDescription={setDescription} />
 
         {isPayWithVisible && (
           <PayWith
-            payWithArr={payWithArr}
             invoice={invoice}
+            currentInvoice={currentInvoice}
             handleInvoiceChoose={handleInvoiceChoose}
+            title='Choose with pay'
           />
         )}
         <Calculator

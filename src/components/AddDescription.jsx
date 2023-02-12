@@ -12,7 +12,7 @@ const AddDescription = ({ description, setDescription }) => {
       value={description}
       onChange={onChange}
       placeholder='add description'
-      className='w-5/6 mb-3 outline-none px-3 py-1 text-center text-gray-500 caret-transparent'
+      className='w-5/6 mb-4 outline-none px-3 text-center text-gray-500 caret-transparent'
       spellCheck={false}
     />
   )

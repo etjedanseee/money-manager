@@ -1,7 +1,11 @@
-export const calcBalance = (invoice) => {
+export const calcBalance = (invoice, filterInvoiceBy) => {
   let sum = 0;
   for (let key in invoice) {
-    sum += invoice[key]
+    if (filterInvoiceBy === 'All invoice') {
+      sum += invoice[key]
+    } else if (key === filterInvoiceBy) {
+      sum += invoice[key]
+    }
   }
   return sum
 }
