@@ -1,7 +1,6 @@
 
 const monthArr = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
-
 export const dateToString = (date) => {
   let str = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`
   return str
@@ -25,12 +24,14 @@ export const getWeekRange = () => {
   const date = new Date();
   const numDayOfWeek = date.getDay();
   const dayNum = date.getDate();
-  const numWeek = Math.round(dayNum / 7)
-
-  const day1 = (numWeek * 7) - numDayOfWeek
-  const day2 = (numWeek * 7)
+  const day1 = dayNum - numDayOfWeek
+  const day2 = dayNum + (7 - numDayOfWeek - 1)
 
   const d1 = new Date(date.getFullYear(), date.getMonth(), day1)
   const d2 = new Date(date.getFullYear(), date.getMonth(), day2)
   return [d1, d2, day1, day2, monthArr[d1.getMonth()]]
+}
+
+export const getCurrentDay = () => {
+  return new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate())
 }

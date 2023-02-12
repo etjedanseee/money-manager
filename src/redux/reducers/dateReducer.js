@@ -1,7 +1,8 @@
+import { getCurrentDay } from "../../utils/calcDate"
 import { SET_SELECTED_DATE, SET_TYPE_DATE_NAME } from "../actions/actionsConsts"
 
 const initialState = {
-  selectedDate: [new Date(0), new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate())],
+  selectedDate: [new Date(0), getCurrentDay()],
   typeDateName: 'All time'
 }
 

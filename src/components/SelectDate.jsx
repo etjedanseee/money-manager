@@ -2,10 +2,16 @@ import React from 'react'
 import { useDispatch } from 'react-redux'
 import CalendarIcon from '../assets/calculator/calendar.svg'
 import { setSelectedDate, setTypeDateName } from '../redux/actions/dateActions';
-import { getMonthRange, getWeekRange, getYearRange } from '../utils/calcDate';
+import { getCurrentDay, getMonthRange, getWeekRange, getYearRange } from '../utils/calcDate';
 
 const SelectDate = ({ handleIsCalendarVisible, handleIsSelectDateVisible, setIsSelectRange }) => {
   const dispatch = useDispatch()
+
+  const closeSelectDate = (e) => {
+    if (e.target.classList.contains('absolute')) {
+      handleIsSelectDateVisible()
+    }
+  }
 
   const onSelectDayClick = () => {
     setIsSelectRange(false)
@@ -20,13 +26,13 @@ const SelectDate = ({ handleIsCalendarVisible, handleIsSelectDateVisible, setIsS
   }
 
   const onAllTimeClick = () => {
-    dispatch(setSelectedDate([new Date(0), new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate())]))
+    dispatch(setSelectedDate([new Date(0), getCurrentDay()]))
     dispatch(setTypeDateName('All time'))
     handleIsSelectDateVisible()
   }
 
   const onTodayClick = () => {
-    dispatch(setSelectedDate(new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate())))
+    dispatch(setSelectedDate(getCurrentDay()))
     dispatch(setTypeDateName('Today'))
     handleIsSelectDateVisible()
   }
@@ -55,7 +61,10 @@ const SelectDate = ({ handleIsCalendarVisible, handleIsSelectDateVisible, setIsS
   }
 
   return (
-    <div className='absolute top-0 left-0 px-6 h-screen w-full bg-black bg-opacity-90 flex items-center justify-center'>
+    <div
+      className='absolute top-0 left-0 px-6 h-screen w-full bg-black bg-opacity-90 flex items-center justify-center'
+      onClick={e => closeSelectDate(e)}
+    >
       <div className='w-full bg-white rounded-xl text-center grid grid-cols-2 grid-rows-4 text-black'>
         <div
           onClick={onSelectRangeClick}

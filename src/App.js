@@ -17,8 +17,8 @@ function App() {
   }, [categories, selectedDate, typeDateName, spent, dispatch])
 
   return (
-    <>
-      <div className='relative flex flex-col justify-center items-center max-w-md mx-auto'>
+    <div className='bg-black min-h-screen'>
+      <div className='relative min-h-screen flex flex-col items-center max-w-md mx-auto bg-white'>
         <Header
           money={money}
           typeDateName={typeDateName}
@@ -35,7 +35,7 @@ function App() {
           />
         </div>
       </div>
-    </>
+    </div>
   );
 }
 

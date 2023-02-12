@@ -45,7 +45,8 @@ export const moneyReducer = (state = initialState, action) => {
       const newSpent = {
         sum: action.payload.sum,
         payWith: action.payload.payWith,
-        date
+        date,
+        description: action.payload.description
       }
       if (state.spent[action.payload.category] && state.spent[action.payload.category][dateToString(date)]) {
         const newArr = [...state.spent[action.payload.category][dateToString(date)], newSpent]

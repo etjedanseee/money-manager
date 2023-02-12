@@ -6,10 +6,11 @@ import DeleteIcon from '../assets/calculator/delete.svg'
 import DivisionIcon from '../assets/calculator/division.svg'
 import MultiplyIcon from '../assets/calculator/multiply.svg'
 import PlusIcon from '../assets/calculator/plus.svg'
+import { getCurrentDay } from '../utils/calcDate'
 import CalendarFC from './CalendarFC'
 
 const Calculator = ({ spendValue, handleSpendValue, addNewSpent, isCalendarVisible, setIsCalendarVisible }) => {
-  const [selectedDate, setSelectedDate] = useState(new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate()));
+  const [selectedDate, setSelectedDate] = useState(getCurrentDay());
 
   const handleIsCalendarVisible = (date) => {
     setIsCalendarVisible(prev => !prev)
