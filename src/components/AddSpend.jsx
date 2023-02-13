@@ -94,6 +94,7 @@ const AddSpend = ({ setIsAddSpendVisible, category }) => {
             invoice={invoice}
             currentInvoice={currentInvoice}
             handleInvoiceChoose={handleInvoiceChoose}
+            handlePayWithVisible={handlePayWithVisible}
             title='Choose with pay'
           />
         )}
