@@ -33,6 +33,7 @@ const Invoice = () => {
           invoice={invoiseAndAllInvoice}
           handleInvoiceChoose={handleInvoiceChoose}
           currentInvoice={currentInvoice}
+          handlePayWithVisible={handlePayWithVisible}
           title='Select invoice to filter'
         />)
       }

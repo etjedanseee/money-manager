@@ -1,6 +1,7 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { addSpend } from '../redux/actions/moneyActions'
+import { isStringIncludesOperator } from '../utils/isStringIncludesOperator'
 import AddDescription from './AddDescription'
 import Calculator from './Calculator'
 import PayWith from './PayWith'
@@ -11,15 +12,22 @@ const AddSpend = ({ setIsAddSpendVisible, category }) => {
   const [isPayWithVisible, setIsPayWithVisible] = useState(false)
   const [isCalendarVisible, setIsCalendarVisible] = useState(false)
   const [description, setDescription] = useState('')
+  const [isNeedToCalc, setIsNeedToCalc] = useState(false)
 
   const invoice = useSelector(state => state.money.invoice)
-
   const dispatch = useDispatch()
+
+  useEffect(() => {
+    const bool = isStringIncludesOperator(spendValue)
+    setIsNeedToCalc(bool)
+  }, [spendValue])
 
   const handleSpendValue = (value) => {
     if (value[0] === '0') {
-      if (value.length !== 1) {
+      if (value.length === 2 && value[1] !== '.') {
         setSpendValue(value.slice(1))
+      } else if (value[1] === '.') {
+        setSpendValue(value)
       } else {
         setSpendValue('0')
       }
@@ -37,9 +45,9 @@ const AddSpend = ({ setIsAddSpendVisible, category }) => {
     setIsPayWithVisible(false)
   }
 
-  const addNewSpent = (date) => {
+  const addNewOperation = (date) => {
     const obj = {
-      sum: parseInt(spendValue),
+      sum: parseFloat(spendValue),
       payWith: currentInvoice,
       category,
       date,
@@ -92,9 +100,10 @@ const AddSpend = ({ setIsAddSpendVisible, category }) => {
         <Calculator
           spendValue={spendValue}
           handleSpendValue={handleSpendValue}
-          addNewSpent={addNewSpent}
+          addNewOperation={addNewOperation}
           setIsCalendarVisible={setIsCalendarVisible}
           isCalendarVisible={isCalendarVisible}
+          isNeedToCalc={isNeedToCalc}
         />
       </div>
     </div>

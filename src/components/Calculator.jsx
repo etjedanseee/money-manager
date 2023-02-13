@@ -6,10 +6,13 @@ import DeleteIcon from '../assets/calculator/delete.svg'
 import DivisionIcon from '../assets/calculator/division.svg'
 import MultiplyIcon from '../assets/calculator/multiply.svg'
 import PlusIcon from '../assets/calculator/plus.svg'
+import EqualIcon from '../assets/calculator/equal.svg'
 import { getCurrentDay } from '../utils/calcDate'
+import { isStringIncludesOperator } from '../utils/isStringIncludesOperator'
 import CalendarFC from './CalendarFC'
+import { calcExpression } from '../utils/calcExpression'
 
-const Calculator = ({ spendValue, handleSpendValue, addNewSpent, isCalendarVisible, setIsCalendarVisible }) => {
+const Calculator = ({ spendValue, handleSpendValue, addNewOperation, isCalendarVisible, setIsCalendarVisible, isNeedToCalc }) => {
   const [selectedDate, setSelectedDate] = useState(getCurrentDay());
 
   const handleIsCalendarVisible = (date) => {
@@ -60,12 +63,35 @@ const Calculator = ({ spendValue, handleSpendValue, addNewSpent, isCalendarVisib
         handleSpendValue(spendValue + '9')
         break;
       }
-      case '/': {
-        handleSpendValue(spendValue + '/')
+      case '.': {
+        handleSpendValue(spendValue + '.')
         break;
       }
-      case 'd': {
-        console.log(spendValue.length)
+      case '/': {
+        if (!isStringIncludesOperator(spendValue) && parseFloat(spendValue)) {
+          handleSpendValue(spendValue + '/')
+        }
+        break;
+      }
+      case '*': {
+        if (!isStringIncludesOperator(spendValue) && parseFloat(spendValue)) {
+          handleSpendValue(spendValue + '*')
+        }
+        break;
+      }
+      case '-': {
+        if (!isStringIncludesOperator(spendValue) && parseFloat(spendValue)) {
+          handleSpendValue(spendValue + '-')
+        }
+        break;
+      }
+      case '+': {
+        if (!isStringIncludesOperator(spendValue) && parseFloat(spendValue)) {
+          handleSpendValue(spendValue + '+')
+        }
+        break;
+      }
+      case 'delete': {
         if (spendValue.length <= 1) {
           handleSpendValue('0')
         } else {
@@ -73,9 +99,12 @@ const Calculator = ({ spendValue, handleSpendValue, addNewSpent, isCalendarVisib
         }
         break;
       }
-      //если не надо считать диспатчить
-      case 'a': {
-        addNewSpent(selectedDate)
+      case 'accept': {
+        addNewOperation(selectedDate)
+        break;
+      }
+      case 'calc': {
+        handleSpendValue(calcExpression(spendValue))
         break;
       }
       default: return
@@ -112,12 +141,13 @@ const Calculator = ({ spendValue, handleSpendValue, addNewSpent, isCalendarVisib
         </div>
         <div
           className='flex justify-center items-center border-2 border-gray-400 py-3'
-          onClick={() => handleCalculator('d')}
+          onClick={() => handleCalculator('delete')}
         >
           <img src={DeleteIcon} className='h-8' alt="" />
         </div>
         <div
           className='flex justify-center items-center border-2 border-gray-400 py-3'
+          onClick={() => handleCalculator('*')}
         >
           <img src={MultiplyIcon} className='h-8' alt="" />
         </div>
@@ -147,6 +177,7 @@ const Calculator = ({ spendValue, handleSpendValue, addNewSpent, isCalendarVisib
         </div>
         <div
           className='flex justify-center items-center border-2 border-gray-400 py-3'
+          onClick={() => handleCalculator('-')}
         >
           <img src={DecreaseIcon} className='h-8' alt="" />
         </div>
@@ -168,14 +199,24 @@ const Calculator = ({ spendValue, handleSpendValue, addNewSpent, isCalendarVisib
         >
           3
         </div>
-        <div
-          onClick={() => handleCalculator('a')}
-          className='flex justify-center items-center row-start-3 row-end-5 col-start-5 bg-[#ff4181] border-2 border-gray-400 py-3'
-        >
-          <img src={CheckmarkIcon} className='h-8 ' alt="" />
-        </div>
+        {isNeedToCalc ? (
+          <div
+            onClick={() => handleCalculator('calc')}
+            className='flex justify-center items-center row-start-3 row-end-5 col-start-5 bg-[#ff4181] border-2 border-gray-400 py-3'
+          >
+            <img src={EqualIcon} className='h-8' alt="" />
+          </div>)
+          : <div
+            onClick={() => handleCalculator('accept')}
+            className='flex justify-center items-center row-start-3 row-end-5 col-start-5 bg-[#ff4181] border-2 border-gray-400 py-3'
+          >
+            <img src={CheckmarkIcon} className='h-9' alt="" />
+          </div>
+        }
+
         <div
           className='flex justify-center items-center border-2 border-gray-400 py-3'
+          onClick={() => handleCalculator('+')}
         >
           <img src={PlusIcon} className='h-8 ' alt="" />
         </div>
@@ -187,9 +228,10 @@ const Calculator = ({ spendValue, handleSpendValue, addNewSpent, isCalendarVisib
           0
         </div>
         <div
-          className='flex justify-center items-center border-2 border-gray-400 py-3'
+          className='flex justify-center items-center border-2 border-gray-400 py-3 text-2xl leading-none'
+          onClick={() => handleCalculator('.')}
         >
-          ,
+          .
         </div>
       </div>
     </>
