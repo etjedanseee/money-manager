@@ -1,7 +1,7 @@
 import { dateToString } from "../utils/calcDate";
 
 export const dbSpent = {
-  Taxi: {
+  Transport: {
     [dateToString(new Date(2023, 1, 5))]: [
       { sum: 100, payWith: 'Cash', date: new Date(2023, 1, 5) },
       { sum: 50, payWith: 'Card', date: new Date(2023, 1, 5) }

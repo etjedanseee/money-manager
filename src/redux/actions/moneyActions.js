@@ -1,4 +1,4 @@
-import { ADD_SPEND, SET_FILTER_INVOICE_BY, SET_SORTED_SPENT } from "./actionsConsts"
+import { ADD_NEW_CATEGORY, ADD_SPEND, SET_FILTER_INVOICE_BY, SET_SORTED_SPENT } from "./actionsConsts"
 
 export const addSpend = (data) => {
   return {
@@ -18,5 +18,12 @@ export const setFilterInvoiceBy = (filter) => {
   return {
     type: SET_FILTER_INVOICE_BY,
     payload: filter
+  }
+}
+
+export const addNewCategory = (data) => {
+  return {
+    type: ADD_NEW_CATEGORY,
+    payload: data
   }
 }

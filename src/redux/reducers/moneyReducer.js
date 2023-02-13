@@ -1,11 +1,11 @@
 import { dateToString } from "../../utils/calcDate"
-import { ADD_SPEND, SET_FILTER_INVOICE_BY, SET_SORTED_SPENT } from "../actions/actionsConsts"
+import { ADD_NEW_CATEGORY, ADD_SPEND, SET_FILTER_INVOICE_BY, SET_SORTED_SPENT } from "../actions/actionsConsts"
 import { dbSpent } from "../dbSpent"
 
 const initialState = {
   invoice: { Cash: 3000, Card: 5000, CardX: 1000 },
   filterInvoiceBy: 'All invoice',
-  categories: { Food: 'rgb(166,236,255)', Rest: 'rgb(40,255,36)', Housing: 'rgb(67,46,255)', Health: 'rgb(23,255,210)', Cafe: 'rgb(255,93,69)', Cloth: 'rgb(132,85,255)', Pets: 'rgb(1,254,1)', Gifts: 'rgb(187,255,35)', Relations: 'rgb(255,101,85)', Taxi: 'rgb(234,77,255)' },
+  categories: { Food: '#4ba5f2', Rest: '#f84984', Housing: '#2e393f', Health: '#49ad51', Cafe: '#4758b4', Purchases: '#7c5c4f', Pets: '#7a4ef7', Gifts: '#f35353', Relations: '#ef4981', Transport: '#f4a642' },
   spent: {
     ...dbSpent
   },
@@ -63,6 +63,12 @@ export const moneyReducer = (state = initialState, action) => {
       return {
         ...state,
         filterInvoiceBy: action.payload
+      }
+    }
+    case ADD_NEW_CATEGORY: {
+      return {
+        ...state,
+        categories: { ...state.categories, [action.payload.title]: action.payload.color }
       }
     }
     default: return state
