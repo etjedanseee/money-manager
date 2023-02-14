@@ -1,14 +1,19 @@
 import React, { useState } from 'react'
-import { NavLink } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
 import AddSpend from './AddSpend'
 
-const Categories = ({ sortedCategories, sortedColors, sortedTotalSum }) => {
+const Categories = ({ sortedCategories, sortedColors, sortedTotalSum, isEditCategories }) => {
   const [isAddSpendVisible, setIsAddSpendVisible] = useState(false)
   const [currentCategory, setCurrentCategory] = useState('Cafe')
+  const navigate = useNavigate()
 
   const onCategoryClick = (category) => {
-    setCurrentCategory(category)
-    setIsAddSpendVisible(true)
+    if (isEditCategories) {
+      navigate('edit-category/' + category)
+    } else {
+      setCurrentCategory(category)
+      setIsAddSpendVisible(true)
+    }
   }
 
   return (
@@ -30,7 +35,7 @@ const Categories = ({ sortedCategories, sortedColors, sortedTotalSum }) => {
       ))}
       {sortedCategories?.length < 12 && (
         <NavLink
-          to='/newCategory'
+          to='/new-category'
           className='place-self-center flex flex-col justify-center items-center'
         >
           <div className='text-lg font-medium text-transparent'>new</div>

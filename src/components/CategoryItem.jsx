@@ -1,22 +1,17 @@
 import React, { useState } from 'react'
 import { ReactComponent as ArrowIcon } from '../assets/icons/arrow.svg'
 import { ReactComponent as CheckMarkIcon } from '../assets/calculator/checkmark.svg'
-import { useNavigate } from 'react-router-dom'
-import { useDispatch } from 'react-redux'
-import { addNewCategory } from '../redux/actions/moneyActions'
 
-const NewCattegory = ({ categories }) => {
-  const [title, setTitle] = useState('')
+const CategoryItem = ({ categories, onClose, onConfirm, isNewCategory, defaultTitle, defaultColor }) => {
+  const [title, setTitle] = useState(defaultTitle)
   const [titleError, setTitleError] = useState('Title is required')
   const [isTitleDirty, setIsTitleDirty] = useState(false)
-  const [color, setColor] = useState('#4bb98f')
-
-  const navigate = useNavigate()
-  const dispatch = useDispatch()
+  const [color, setColor] = useState(defaultColor)
 
   const handleTitle = (e) => {
     setTitle(e.target.value)
-    if (!e.target.value.length) {
+    setIsTitleDirty(true)
+    if (!e.target.value.trim().length) {
       setTitleError('Title is required')
     } else if (categories[e.target.value]) {
       setTitleError('Title must be unique')
@@ -25,23 +20,17 @@ const NewCattegory = ({ categories }) => {
     }
   }
 
+  const handleOnConfirm = () => {
+    setIsTitleDirty(true)
+    onConfirm(title, color, titleError)
+  }
+
   const handleColor = (e) => {
     setColor(e.target.value)
   }
 
-  const onClose = () => {
-    navigate('/')
-  }
-
-  const onAdd = () => {
-    if (!titleError) {
-      dispatch(addNewCategory({ title, color }))
-      navigate('/')
-    }
-  }
-
   return (
-    <div className='w-full '>
+    <div className='w-full'>
       <div className='flex justify-between items-center pt-5 pb-2 text-white bg-[#e53872] px-6 gap-x-6'>
         <div className='flex-initial'>
           <ArrowIcon
@@ -49,10 +38,10 @@ const NewCattegory = ({ categories }) => {
             className='fill-white h-6 w-full'
           />
         </div>
-        <div className='flex-1 text-2xl -mt-1'>New category</div>
+        <div className='flex-1 text-2xl -mt-1'>{isNewCategory ? 'New category' : 'Edit category'}</div>
         <div className='flex-initial'>
           <CheckMarkIcon
-            onClick={onAdd}
+            onClick={handleOnConfirm}
             className='fill-white h-8 w-full'
           />
         </div>
@@ -92,4 +81,4 @@ const NewCattegory = ({ categories }) => {
   )
 }
 
-export default NewCattegory
+export default CategoryItem

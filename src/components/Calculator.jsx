@@ -99,7 +99,7 @@ const Calculator = ({ spendValue, handleSpendValue, addNewOperation, isCalendarV
         }
         break;
       }
-      case 'accept': {
+      case 'confirm': {
         addNewOperation(selectedDate)
         break;
       }
@@ -207,7 +207,7 @@ const Calculator = ({ spendValue, handleSpendValue, addNewOperation, isCalendarV
             <img src={EqualIcon} className='h-8' alt="" />
           </div>)
           : <div
-            onClick={() => handleCalculator('accept')}
+            onClick={() => handleCalculator('confirm')}
             className='flex justify-center items-center row-start-3 row-end-5 col-start-5 bg-[#ff4181] border-2 border-gray-400 py-3'
           >
             <img src={CheckmarkIcon} className='h-9' alt="" />

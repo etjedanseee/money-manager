@@ -34,7 +34,7 @@ const CalendarFC = ({ isSelectRange, handleIsCalendarVisible }) => {
           className='text-3xl px-5 pt-1 pb-2 bg-[#ff4181] rounded-md text-white leading-none'
           onClick={sendDate}
         >
-          Accept
+          Confirm
         </div>
       </div>
     </div>
