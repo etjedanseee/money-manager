@@ -1,20 +1,20 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useNavigate, useParams } from 'react-router-dom'
-import { deleteCategory, editCategory } from '../redux/actions/moneyActions'
-import { ReactComponent as DeleteIcon } from '../assets/icons/delete.svg'
-import Confirm from '../UI/Confirm'
 import InvoiceOrCategoryItem from '../components/InvoiceOrCategoryItem'
+import { deleteInvoice, editInvoice } from '../redux/actions/moneyActions'
+import Confirm from '../UI/Confirm'
+import { ReactComponent as DeleteIcon } from '../assets/icons/delete.svg'
 
-const EditCategory = ({ categories }) => {
-  const { category } = useParams()
+const EditInvoice = ({ invoiceArr }) => {
+  const { invoice } = useParams()
   const [isConfirmVisible, setIsConfirmVisible] = useState(false)
   const [isDelete, setIsDelete] = useState(false)
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
   const onConfirm = (title, _, color) => {
-    dispatch(editCategory({ category, title, color }))
+    dispatch(editInvoice({ invoice, title, color }))
     navigate('/')
   }
 
@@ -32,7 +32,7 @@ const EditCategory = ({ categories }) => {
 
   useEffect(() => {
     if (isDelete) {
-      dispatch(deleteCategory(category))
+      dispatch(deleteInvoice(invoice))
       navigate('/')
     }
   }, [isDelete])
@@ -41,19 +41,19 @@ const EditCategory = ({ categories }) => {
     <div className='w-full'>
       {isConfirmVisible && (
         <Confirm
-          message='If delete category all operations with it will be deleted'
+          message='If delete invoice all operations with it will be deleted'
           setIsConfirmVisible={setIsConfirmVisible}
           resultCalb={confirmResult}
         />
       )}
       <InvoiceOrCategoryItem
-        arr={categories}
+        arr={invoice}
         onClose={onClose}
         onConfirm={onConfirm}
         isNew={false}
-        defaultTitle={category}
-        defaultColor={categories[category]}
-        type='category'
+        defaultTitle={invoice}
+        defaultColor={invoiceArr[invoice]?.color}
+        type='invoice'
       />
 
       <div
@@ -63,10 +63,10 @@ const EditCategory = ({ categories }) => {
         <div className='flex-initial'>
           <DeleteIcon className='fill-red-600 h-6 w-full' />
         </div>
-        <div className='text-xl font-medium text-red-600'>Delete category</div>
+        <div className='text-xl font-medium text-red-600'>Delete invoice</div>
       </div>
     </div>
   )
 }
 
-export default EditCategory
+export default EditInvoice

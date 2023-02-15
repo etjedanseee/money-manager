@@ -26,10 +26,10 @@ const PayWith = ({ invoice, currentInvoice, handleInvoiceChoose, title, handlePa
             className={`${key === currentInvoice ? 'bg-[#5c6bc0]' : 'bg-white'} flex items-center text-start px-4 py-3 gap-x-2 `}
             onClick={() => handlePayWithClick(key)}
           >
-            <div className={`w-12 h-10 ${key === currentInvoice ? 'bg-green-400' : 'bg-yellow-400'} `}></div>
+            <div className='w-12 h-10' style={{ backgroundColor: invoice[key].color }}></div>
             <div className={`${key === currentInvoice ? 'text-white' : 'text-black'} `}>
               <div className='text-lg mb-1 leading-none'>{key}</div>
-              <div className='text-lg leading-none '>{invoice[key]}$</div>
+              <div className='text-lg leading-none '>{invoice[key].sum}$</div>
             </div>
           </div>))}
       </div>

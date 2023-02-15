@@ -11,6 +11,7 @@ import InvoiceManager from './pages/InvoiceManager';
 import NewInvoice from './pages/NewInvoice';
 import FooterMenu from './components/FooterMenu';
 import Operations from './pages/Operations';
+import EditInvoice from './pages/EditInvoice';
 
 function App() {
   const { filterInvoiceBy, categories, spent, sortedCategories, sortedColors, sortedTotalSum, isEditCategories, invoice } = useSelector(state => state.money)
@@ -38,6 +39,7 @@ function App() {
           <Route path='/edit-category/:category' element={<EditCategory categories={categories} />} />
           <Route path='/invoice' element={<InvoiceManager invoice={invoice} />} />
           <Route path='/new-invoice' element={<NewInvoice invoice={invoice} />} />
+          <Route path='/edit-invoice/:invoice' element={<EditInvoice invoiceArr={invoice} />} />
           <Route path='/operations' element={<Operations />} />
         </Routes>
         <FooterMenu />

@@ -8,7 +8,7 @@ const InvoiceManager = ({ invoice }) => {
   const navigate = useNavigate()
 
   const onAddInvoice = () => {
-    navigate('new-invoice')
+    navigate('/new-invoice')
   }
 
   return (
@@ -22,12 +22,12 @@ const InvoiceManager = ({ invoice }) => {
           key={key}
           className='flex gap-x-3 mb-3'
         >
-          <div className='bg-green-600 w-14 h-10 rounded-md'></div>
+          <div className='w-14 h-10 rounded-md' style={{ backgroundColor: invoice[key].color }}></div>
           <div className='w-full leading-none'>
             <div className='mb-1'>{key}</div>
             <div className={`${calcBalance(invoice, key) < 0 ? 'text-red-500' : 'text-gray-700'} mb-3`}
             >
-              {invoice[key]}$
+              {invoice[key].sum}$
             </div>
             <div className='h-[2px] bg-gray-300'></div>
           </div>

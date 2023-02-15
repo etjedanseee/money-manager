@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { ReactComponent as ArrowIcon } from '../assets/icons/arrow.svg'
 import { ReactComponent as CheckMarkIcon } from '../assets/calculator/checkmark.svg'
 
-const CategoryItem = ({ categories, onClose, onConfirm, isNewCategory, defaultTitle, defaultColor }) => {
+const InvoiceOrCategoryItem = ({ arr, isNew, defaultTitle, defaultColor, onClose, onConfirm, type }) => {
   const [title, setTitle] = useState(defaultTitle)
   const [titleError, setTitleError] = useState('Title is required')
   const [isTitleDirty, setIsTitleDirty] = useState(false)
@@ -13,20 +13,20 @@ const CategoryItem = ({ categories, onClose, onConfirm, isNewCategory, defaultTi
     setIsTitleDirty(true)
     if (!e.target.value.trim().length) {
       setTitleError('Title is required')
-    } else if (categories[e.target.value]) {
+    } else if (arr[e.target.value]) {
       setTitleError('Title must be unique')
     } else {
       setTitleError('')
     }
   }
 
-  const handleOnConfirm = () => {
-    setIsTitleDirty(true)
-    onConfirm(title, color, titleError)
-  }
-
   const handleColor = (e) => {
     setColor(e.target.value)
+  }
+
+  const handleOnConfirm = () => {
+    setIsTitleDirty(true)
+    onConfirm(title, titleError, color)
   }
 
   return (
@@ -38,7 +38,7 @@ const CategoryItem = ({ categories, onClose, onConfirm, isNewCategory, defaultTi
             className='fill-white h-6 w-full'
           />
         </div>
-        <div className='flex-1 text-2xl -mt-1'>{isNewCategory ? 'New category' : 'Edit category'}</div>
+        <div className='flex-1 text-2xl -mt-1'>{isNew ? `New ${type}` : `Edit ${type}`}</div>
         <div className='flex-initial'>
           <CheckMarkIcon
             onClick={handleOnConfirm}
@@ -81,4 +81,4 @@ const CategoryItem = ({ categories, onClose, onConfirm, isNewCategory, defaultTi
   )
 }
 
-export default CategoryItem
+export default InvoiceOrCategoryItem

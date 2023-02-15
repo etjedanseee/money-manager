@@ -3,7 +3,7 @@ import { ADD_NEW_CATEGORY, ADD_SPEND, DELETE_CATEGORY, EDIT_CATEGORY, SET_FILTER
 import { dbSpent } from "../dbSpent"
 
 const initialState = {
-  invoice: { Cash: 3000, Card: 5000, CardX: -200 },
+  invoice: { Cash: { sum: 3000, color: '#4efe00' }, Card: { sum: 5000, color: '#ed2ae3' }, CardX: { sum: -200, color: '#051cfa' } },
   filterInvoiceBy: 'All invoice',
   categories: { Food: '#4ba5f2', Rest: '#f84984', Housing: '#2e393f', Health: '#49ad51', Cafe: '#4758b4', Purchases: '#7c5c4f', Pets: '#7a4ef7', Gifts: '#f35353', Relations: '#ef4981', Transport: '#f4a642' },
   spent: { ...dbSpent },
@@ -45,7 +45,10 @@ export const moneyReducer = (state = initialState, action) => {
           },
           invoice: {
             ...state.invoice,
-            [action.payload.payWith]: state.invoice[action.payload.payWith] - action.payload.sum
+            [action.payload.payWith]: {
+              ...state.invoice[action.payload.payWith],
+              sum: state.invoice[action.payload.payWith].sum - action.payload.sum
+            }
           }
         }
       }

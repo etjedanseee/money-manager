@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import { useSelector } from 'react-redux'
 import Header from '../components/Header'
 import { getOperations } from '../utils/calcSpent'
@@ -8,7 +8,7 @@ const Operations = () => {
   const { typeDateName, selectedDate } = useSelector(state => state.date)
   const { spent, categories, filterInvoiceBy } = useSelector(state => state.money)
 
-  const operationsRes = getOperations(spent, categories, selectedDate, filterInvoiceBy)
+  const operationsRes = useMemo(() => getOperations(spent, categories, selectedDate, filterInvoiceBy), [spent, categories, selectedDate, filterInvoiceBy])
   const date = Object.keys(operationsRes)
 
   return (
