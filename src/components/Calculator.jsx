@@ -114,7 +114,7 @@ const Calculator = ({ spendValue, handleSpendValue, addNewOperation, isCalendarV
   return (
     <>
       {isCalendarVisible && <CalendarFC isSelectRange={false} handleIsCalendarVisible={handleIsCalendarVisible} />}
-      <div className='w-full grid grid-rows-4 grid-cols-5 '>
+      <div className='w-full grid grid-rows-4 grid-cols-5 pb-14'>
         <div
           className='flex justify-center items-center border-2 border-gray-400 py-3'
           onClick={() => handleCalculator('/')}

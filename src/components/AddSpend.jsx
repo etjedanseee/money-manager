@@ -51,7 +51,8 @@ const AddSpend = ({ setIsAddSpendVisible, category }) => {
       payWith: currentInvoice,
       category,
       date,
-      description
+      description,
+      id: Date.now()
     }
     if (spendValue !== '0') {
       dispatch(addSpend(obj))

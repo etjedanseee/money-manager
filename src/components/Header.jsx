@@ -44,7 +44,7 @@ const Header = ({ typeDateName, isEditCategories }) => {
   }
 
   return (
-    <div className='bg-[#5c6bc0] w-full text-white py-2 px-4'>
+    <div className='fixed top-0 max-w-md bg-[#5c6bc0] w-full text-white py-2 px-4'>
       {isEditCategories ? (
         <div className='flex justify-between items-center flex-wrap pt-1 gap-x-6 pb-8'>
           <div

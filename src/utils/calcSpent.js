@@ -59,3 +59,55 @@ const sortData = (spentArr) => {
   }
   return [sortedCategories, sortedColors, sortedSum]
 }
+
+export const getOperations = (spent, categories, selectedDate, filterInvoiceBy) => {
+  const res = {}
+  if (selectedDate.length > 0) {
+    const startDate = selectedDate[0];
+    const endDate = selectedDate[1];
+    for (let categ in categories) {
+      for (let date in spent[categ]) {
+        const parsedDate = new Date(Date.parse(date));
+        if ((parsedDate < startDate) || (parsedDate > endDate)) {
+          continue
+        }
+        if (!res[date]) {
+          res[date] = {
+            operations: [],
+            totalSum: 0
+          }
+        }
+        for (let operation of spent[categ][date]) {
+          const operObj = { ...operation, category: categ, color: categories[categ] }
+          if (filterInvoiceBy === 'All invoice' || operation.payWith === filterInvoiceBy) {
+            res[date].operations.push(operObj)
+            res[date].totalSum += operObj.sum
+          }
+        }
+      }
+    }
+  } else {
+    for (let categ in categories) {
+      for (let date in spent[categ]) {
+        const parsedDate = new Date(Date.parse(date));
+        if (+parsedDate !== +selectedDate) {
+          continue
+        }
+        if (!res[date]) {
+          res[date] = {
+            operations: [],
+            totalSum: 0
+          }
+        }
+        for (let operation of spent[categ][date]) {
+          const operObj = { ...operation, category: categ, color: categories[categ] }
+          if (filterInvoiceBy === 'All invoice' || operation.payWith === filterInvoiceBy) {
+            res[date].operations.push(operObj)
+            res[date].totalSum += operObj.sum
+          }
+        }
+      }
+    }
+  }
+  return res
+}

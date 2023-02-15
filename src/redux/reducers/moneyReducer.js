@@ -3,7 +3,7 @@ import { ADD_NEW_CATEGORY, ADD_SPEND, DELETE_CATEGORY, EDIT_CATEGORY, SET_FILTER
 import { dbSpent } from "../dbSpent"
 
 const initialState = {
-  invoice: { Cash: 3000, Card: 5000, CardX: 1000 },
+  invoice: { Cash: 3000, Card: 5000, CardX: -200 },
   filterInvoiceBy: 'All invoice',
   categories: { Food: '#4ba5f2', Rest: '#f84984', Housing: '#2e393f', Health: '#49ad51', Cafe: '#4758b4', Purchases: '#7c5c4f', Pets: '#7a4ef7', Gifts: '#f35353', Relations: '#ef4981', Transport: '#f4a642' },
   spent: { ...dbSpent },
@@ -20,8 +20,8 @@ export const moneyReducer = (state = initialState, action) => {
       const newSpent = {
         sum: action.payload.sum,
         payWith: action.payload.payWith,
-        date,
-        description: action.payload.description
+        description: action.payload.description,
+        id: action.payload.id
       }
       if (state.spent[action.payload.category] && state.spent[action.payload.category][dateToString(date)]) {
         const newArr = [...state.spent[action.payload.category][dateToString(date)], newSpent]

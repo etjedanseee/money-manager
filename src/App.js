@@ -7,9 +7,13 @@ import { Route, Routes } from 'react-router-dom';
 import Home from './pages/Home';
 import NewCategory from './pages/NewCategory';
 import EditCategory from './pages/EditCategory';
+import InvoiceManager from './pages/InvoiceManager';
+import NewInvoice from './pages/NewInvoice';
+import FooterMenu from './components/FooterMenu';
+import Operations from './pages/Operations';
 
 function App() {
-  const { filterInvoiceBy, categories, spent, sortedCategories, sortedColors, sortedTotalSum, isEditCategories } = useSelector(state => state.money)
+  const { filterInvoiceBy, categories, spent, sortedCategories, sortedColors, sortedTotalSum, isEditCategories, invoice } = useSelector(state => state.money)
   const { selectedDate, typeDateName } = useSelector(state => state.date)
   const dispatch = useDispatch()
 
@@ -32,7 +36,11 @@ function App() {
           />
           <Route path='/new-category' element={<NewCategory categories={categories} />} />
           <Route path='/edit-category/:category' element={<EditCategory categories={categories} />} />
+          <Route path='/invoice' element={<InvoiceManager invoice={invoice} />} />
+          <Route path='/new-invoice' element={<NewInvoice invoice={invoice} />} />
+          <Route path='/operations' element={<Operations />} />
         </Routes>
+        <FooterMenu />
       </div>
     </div>
   );

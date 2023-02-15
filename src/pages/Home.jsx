@@ -1,12 +1,11 @@
 import React from 'react'
-import { useDispatch, useSelector } from 'react-redux'
 import Categories from '../components/Categories'
 import Diagram from '../components/Diagram'
 import Header from '../components/Header'
 
 const Home = ({ typeDateName, sortedCategories, sortedColors, sortedTotalSum, isEditCategories }) => {
   return (
-    <>
+    <div className='pt-20'>
       <Header
         typeDateName={typeDateName}
         isEditCategories={isEditCategories}
@@ -23,7 +22,7 @@ const Home = ({ typeDateName, sortedCategories, sortedColors, sortedTotalSum, is
           sortedTotalSum={sortedTotalSum}
         />
       </div>
-    </>
+    </div>
   )
 }
 
