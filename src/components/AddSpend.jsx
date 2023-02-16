@@ -7,14 +7,15 @@ import Calculator from './Calculator'
 import PayWith from './PayWith'
 
 const AddSpend = ({ setIsAddSpendVisible, category }) => {
+  const invoice = useSelector(state => state.money.invoice)
+
   const [spendValue, setSpendValue] = useState('0')
-  const [currentInvoice, setCurrentInvoice] = useState('Cash')
+  const [currentInvoice, setCurrentInvoice] = useState(Object.keys(invoice)[0])
   const [isPayWithVisible, setIsPayWithVisible] = useState(false)
   const [isCalendarVisible, setIsCalendarVisible] = useState(false)
   const [description, setDescription] = useState('')
   const [isNeedToCalc, setIsNeedToCalc] = useState(false)
 
-  const invoice = useSelector(state => state.money.invoice)
   const dispatch = useDispatch()
 
   useEffect(() => {

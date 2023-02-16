@@ -1,9 +1,9 @@
 import { dateToString } from "../../utils/calcDate"
-import { ADD_NEW_CATEGORY, ADD_SPEND, DELETE_CATEGORY, EDIT_CATEGORY, SET_FILTER_INVOICE_BY, SET_SORTED_SPENT, TOGGLE_IS_EDIT_CATEGORIES } from "../actions/actionsConsts"
+import { ADD_NEW_CATEGORY, ADD_NEW_INVOICE, ADD_SPEND, ADD_SUM_TO_INVOICE, DELETE_CATEGORY, DELETE_INVOICE, EDIT_CATEGORY, EDIT_INVOICE, SET_FILTER_INVOICE_BY, SET_SORTED_SPENT, TOGGLE_IS_EDIT_CATEGORIES } from "../actions/actionsConsts"
 import { dbSpent } from "../dbSpent"
 
 const initialState = {
-  invoice: { Cash: { sum: 3000, color: '#4efe00' }, Card: { sum: 5000, color: '#ed2ae3' }, CardX: { sum: -200, color: '#051cfa' } },
+  invoice: { Cash: { balance: 3000, color: '#4efe00' }, Card: { balance: 5000, color: '#ed2ae3' }, CardX: { balance: -200, color: '#051cfa' } },
   filterInvoiceBy: 'All invoice',
   categories: { Food: '#4ba5f2', Rest: '#f84984', Housing: '#2e393f', Health: '#49ad51', Cafe: '#4758b4', Purchases: '#7c5c4f', Pets: '#7a4ef7', Gifts: '#f35353', Relations: '#ef4981', Transport: '#f4a642' },
   spent: { ...dbSpent },
@@ -33,7 +33,7 @@ export const moneyReducer = (state = initialState, action) => {
           },
           invoice: {
             ...state.invoice,
-            [action.payload.payWith]: state.invoice[action.payload.payWith] - action.payload.sum
+            [action.payload.payWith]: state.invoice[action.payload.payWith].balance - action.payload.sum
           }
         }
       } else {
@@ -47,7 +47,7 @@ export const moneyReducer = (state = initialState, action) => {
             ...state.invoice,
             [action.payload.payWith]: {
               ...state.invoice[action.payload.payWith],
-              sum: state.invoice[action.payload.payWith].sum - action.payload.sum
+              balance: state.invoice[action.payload.payWith].balance - action.payload.sum
             }
           }
         }
@@ -99,6 +99,89 @@ export const moneyReducer = (state = initialState, action) => {
       return {
         ...state,
         isEditCategories: !state.isEditCategories
+      }
+    }
+    case ADD_NEW_INVOICE: {
+      return {
+        ...state,
+        invoice: {
+          ...state.invoice, [action.payload.title]: { color: action.payload.color, balance: parseFloat(action.payload.balance) }
+        }
+      }
+    }
+    case EDIT_INVOICE: {
+      if (action.payload.invoice !== action.payload.title) {
+        const newInvoice = Object.entries(state.invoice).filter(c => c[0] !== action.payload.invoice)
+        const newSpent = {}
+        for (let cg of Object.keys(state.spent)) {
+          newSpent[cg] = {}
+          for (let date in state.spent[cg]) {
+            newSpent[cg][date] = []
+            for (let op of state.spent[cg][date]) {
+              if (op.payWith === action.payload.invoice) {
+                const newOp = {
+                  ...op,
+                  payWith: action.payload.title,
+                }
+                newSpent[cg][date].push(newOp)
+              } else {
+                newSpent[cg][date].push(op)
+              }
+            }
+          }
+        }
+        return {
+          ...state,
+          invoice: {
+            ...Object.fromEntries(newInvoice),
+            [action.payload.title]: { balance: parseFloat(action.payload.balance), color: action.payload.color }
+          },
+          spent: { ...newSpent }
+        }
+      } else {
+        return {
+          ...state,
+          invoice: {
+            ...state.invoice,
+            [action.payload.title]: { balance: parseFloat(action.payload.balance), color: action.payload.color }
+          },
+        }
+      }
+    }
+    case DELETE_INVOICE: {
+      if (Object.keys(state.invoice).length > 1) {
+        const newInvoice = Object.entries(state.invoice).filter(c => c[0] !== action.payload)
+        const newSpent = {}
+        for (let cg of Object.keys(state.spent)) {
+          newSpent[cg] = {}
+          for (let date in state.spent[cg]) {
+            newSpent[cg][date] = []
+            for (let op of state.spent[cg][date]) {
+              if (op.payWith !== action.payload) {
+                newSpent[cg][date].push(op)
+              }
+            }
+          }
+        }
+        return {
+          ...state,
+          invoice: { ...Object.fromEntries(newInvoice) },
+          spent: { ...newSpent }
+        }
+      } else {
+        return state
+      }
+    }
+    case ADD_SUM_TO_INVOICE: {
+      return {
+        ...state,
+        invoice: {
+          ...state.invoice,
+          [action.payload.invoice]: {
+            ...state.invoice[action.payload.invoice],
+            balance: state.invoice[action.payload.invoice].balance + parseFloat(action.payload.sum)
+          }
+        }
       }
     }
     default: return state

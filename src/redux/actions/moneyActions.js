@@ -1,4 +1,4 @@
-import { ADD_NEW_CATEGORY, ADD_NEW_INVOICE, ADD_SPEND, DELETE_CATEGORY, DELETE_INVOICE, EDIT_CATEGORY, EDIT_INVOICE, SET_FILTER_INVOICE_BY, SET_SORTED_SPENT, TOGGLE_IS_EDIT_CATEGORIES } from "./actionsConsts"
+import { ADD_NEW_CATEGORY, ADD_NEW_INVOICE, ADD_SPEND, ADD_SUM_TO_INVOICE, DELETE_CATEGORY, DELETE_INVOICE, EDIT_CATEGORY, EDIT_INVOICE, SET_FILTER_INVOICE_BY, SET_SORTED_SPENT, TOGGLE_IS_EDIT_CATEGORIES } from "./actionsConsts"
 
 export const addSpend = (data) => {
   return {
@@ -66,5 +66,12 @@ export const deleteInvoice = (invoice) => {
   return {
     type: DELETE_INVOICE,
     payload: invoice
+  }
+}
+
+export const addSumToInvoice = (data) => {
+  return {
+    type: ADD_SUM_TO_INVOICE,
+    payload: data
   }
 }

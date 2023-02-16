@@ -8,7 +8,7 @@ import PayWith from './PayWith'
 const Invoice = () => {
   const { invoice, filterInvoiceBy } = useSelector(state => state.money)
   const [isPayWithVisible, setIsPayWithVisible] = useState(false)
-  const [currentInvoice, setCurrentInvoice] = useState('All invoice')
+  const [currentInvoice, setCurrentInvoice] = useState(filterInvoiceBy)
   const dispatch = useDispatch()
 
   const invoiseAndAllInvoice = {

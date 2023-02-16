@@ -29,7 +29,7 @@ const PayWith = ({ invoice, currentInvoice, handleInvoiceChoose, title, handlePa
             <div className='w-12 h-10' style={{ backgroundColor: invoice[key].color }}></div>
             <div className={`${key === currentInvoice ? 'text-white' : 'text-black'} `}>
               <div className='text-lg mb-1 leading-none'>{key}</div>
-              <div className='text-lg leading-none '>{invoice[key].sum}$</div>
+              {invoice[key].balance !== undefined && <div className='text-lg leading-none '>{invoice[key].balance}$</div>}
             </div>
           </div>))}
       </div>

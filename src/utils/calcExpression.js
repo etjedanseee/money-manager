@@ -2,7 +2,7 @@ export const calcExpression = (str) => {
   const operators = ['+', '-', '*', '/']
   let operatorPos, operator;
   for (let op of operators) {
-    const pos = str.indexOf(op)
+    const pos = str.lastIndexOf(op)
     if (pos !== -1) {
       operatorPos = pos
       operator = str.charAt(pos)
