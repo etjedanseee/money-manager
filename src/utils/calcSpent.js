@@ -109,5 +109,10 @@ export const getOperations = (spent, categories, selectedDate, filterInvoiceBy) 
       }
     }
   }
-  return res
+  return sortOperations(res)
+}
+
+const sortOperations = (operations) => {
+  const sortedOperations = Object.entries(operations).sort((date1, date2) => new Date(date2[0]) - new Date(date1[0]))
+  return Object.fromEntries(sortedOperations)
 }

@@ -9,7 +9,7 @@ import NewCategory from './pages/NewCategory';
 import EditCategory from './pages/EditCategory';
 import InvoiceManager from './pages/InvoiceManager';
 import NewInvoice from './pages/NewInvoice';
-import FooterMenu from './components/FooterMenu';
+import FooterMenu from './UI/FooterMenu';
 import Operations from './pages/Operations';
 import EditInvoice from './pages/EditInvoice';
 

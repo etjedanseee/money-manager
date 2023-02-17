@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React, { useMemo, useState } from 'react'
 import { useSelector } from 'react-redux'
 import Header from '../components/Header'
 import { getOperations } from '../utils/calcSpent'
@@ -11,6 +11,14 @@ const Operations = () => {
   const operationsRes = useMemo(() => getOperations(spent, categories, selectedDate, filterInvoiceBy), [spent, categories, selectedDate, filterInvoiceBy])
   const date = Object.keys(operationsRes)
 
+  const [isOperationVisible, setIsOperationVisible] = useState(false)
+  const [operationId, setOperationId] = useState(null)
+
+  const onEditOperations = (id) => {
+    setIsOperationVisible(true)
+    setOperationId(id)
+  }
+
   return (
     <div className='py-20 flex flex-col items-center text-black w-full'>
       <Header typeDateName={typeDateName} isEditCategories={false} />
@@ -22,7 +30,11 @@ const Operations = () => {
               <div className='px-4 text-red-500 font-medium'>-{operationsRes[d].totalSum}$</div>
             </div>
             {operationsRes[d].operations.map(op => (
-              <div key={op.id} className='flex justify-between mb-2 gap-x-4 px-4 py-2'>
+              <div
+                key={op.id}
+                className='flex justify-between mb-2 gap-x-4 px-4 py-2'
+                onClick={onEditOperations}
+              >
                 <div className={`w-10 h-10 rounded-full`} style={{ backgroundColor: op.color }}></div>
                 <div className='flex-1'>
                   <div className='text-lg leading-none mb-1'>{op.category}</div>
@@ -38,6 +50,9 @@ const Operations = () => {
       ))
         : <div className='pt-4 text-2xl text-gray-500'>No match operations</div>
       }
+      {isOperationVisible && (
+        <div>Operation № {operationId}</div>
+      )}
     </div>
   )
 }

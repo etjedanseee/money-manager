@@ -4,7 +4,7 @@ import AddSpend from './AddSpend'
 
 const Categories = ({ sortedCategories, sortedColors, sortedTotalSum, isEditCategories }) => {
   const [isAddSpendVisible, setIsAddSpendVisible] = useState(false)
-  const [currentCategory, setCurrentCategory] = useState('Cafe')
+  const [currentCategory, setCurrentCategory] = useState(null)
   const navigate = useNavigate()
 
   const onCategoryClick = (category) => {
@@ -18,13 +18,13 @@ const Categories = ({ sortedCategories, sortedColors, sortedTotalSum, isEditCate
 
   return (
     <>
-      {sortedCategories?.length && sortedCategories?.map((c, i) => (
+      {sortedCategories?.length && sortedCategories?.map((cat, i) => (
         <div
-          key={c}
+          key={cat}
           className='place-self-center flex flex-col justify-center items-center'
-          onClick={() => onCategoryClick(c)}
+          onClick={() => onCategoryClick(cat)}
         >
-          <div className='text-lg font-medium text-ellipsis max-w-[90px] overflow-hidden'>{c}</div>
+          <div className='text-lg font-medium text-ellipsis max-w-[90px] overflow-hidden'>{cat}</div>
           <div
             style={{ borderColor: sortedColors[i] }}
             className='border-4 rounded-full w-14 h-14 flex justify-center items-center text-xs font-medium'

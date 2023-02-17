@@ -1,41 +1,21 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { addSpend } from '../redux/actions/moneyActions'
-import { isStringIncludesOperator } from '../utils/isStringIncludesOperator'
 import AddDescription from '../UI/AddDescription'
 import Calculator from './Calculator'
 import PayWith from './PayWith'
+import { useCalculator } from '../hooks/useCalculator'
 
 const AddSpend = ({ setIsAddSpendVisible, category }) => {
   const invoice = useSelector(state => state.money.invoice)
 
-  const [spendValue, setSpendValue] = useState('0')
+  const [spendValue, handleSpendValue, isCalcVisible, handleIsCalcVisible, isNeedCalcSpendValue] = useCalculator('0')
   const [currentInvoice, setCurrentInvoice] = useState(Object.keys(invoice)[0])
   const [isPayWithVisible, setIsPayWithVisible] = useState(false)
   const [isCalendarVisible, setIsCalendarVisible] = useState(false)
   const [description, setDescription] = useState('')
-  const [isNeedToCalc, setIsNeedToCalc] = useState(false)
 
   const dispatch = useDispatch()
-
-  useEffect(() => {
-    const bool = isStringIncludesOperator(spendValue)
-    setIsNeedToCalc(bool)
-  }, [spendValue])
-
-  const handleSpendValue = (value) => {
-    if (value[0] === '0') {
-      if (value.length === 2 && value[1] !== '.') {
-        setSpendValue(value.slice(1))
-      } else if (value[1] === '.') {
-        setSpendValue(value)
-      } else {
-        setSpendValue('0')
-      }
-    } else {
-      setSpendValue(value)
-    }
-  }
 
   const handlePayWithVisible = () => {
     setIsPayWithVisible(prev => !prev)
@@ -57,7 +37,7 @@ const AddSpend = ({ setIsAddSpendVisible, category }) => {
     }
     if (spendValue !== '0') {
       dispatch(addSpend(obj))
-      setSpendValue('0')
+      handleSpendValue('0')
     }
     setIsAddSpendVisible(false)
   }
@@ -106,7 +86,7 @@ const AddSpend = ({ setIsAddSpendVisible, category }) => {
           addNewOperation={addNewOperation}
           setIsCalendarVisible={setIsCalendarVisible}
           isCalendarVisible={isCalendarVisible}
-          isNeedToCalc={isNeedToCalc}
+          isNeedToCalc={isNeedCalcSpendValue}
         />
       </div>
     </div>

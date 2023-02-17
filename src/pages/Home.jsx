@@ -1,6 +1,6 @@
 import React from 'react'
 import Categories from '../components/Categories'
-import Diagram from '../components/Diagram'
+import Diagram from '../UI/Diagram'
 import Header from '../components/Header'
 
 const Home = ({ typeDateName, sortedCategories, sortedColors, sortedTotalSum, isEditCategories }) => {

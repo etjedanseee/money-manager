@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { setFilterInvoiceBy } from '../redux/actions/moneyActions'
 import { calcBalance } from '../utils/calcBalance'
-import Balance from './Balance'
+import Balance from '../UI/Balance'
 import PayWith from './PayWith'
 
 const Invoice = () => {
