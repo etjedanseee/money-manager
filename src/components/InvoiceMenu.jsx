@@ -1,46 +1,28 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import EditIcon from '../assets/icons/edit.svg'
 import { ReactComponent as SpinIcon } from '../assets/icons/spin.svg'
 import { ReactComponent as TopUpIcon } from '../assets/icons/arrow-back.svg'
 import { ReactComponent as OperationsIcon } from '../assets/icons/operations.svg'
 import { useNavigate } from 'react-router-dom'
 import Calculator from './Calculator'
-import { isStringIncludesOperator } from '../utils/isStringIncludesOperator'
 import { useDispatch } from 'react-redux'
 import { addSumToInvoice, editInvoice, setFilterInvoiceBy, writeOff } from '../redux/actions/moneyActions'
 import InvoiceList from '../UI/InvoiceList'
 import { calcBalance } from '../utils/calcBalance'
-import { handleCalcValue } from '../utils/handleCalcValue'
+import { useCalculator } from '../hooks/useCalculator'
 
-//написать хук с value, isCalcVisible и title
 const InvoiceMenu = ({ currentInvoice, name, handleIsMenuVisible, invoice }) => {
-  const [isBalanceCalcVisible, setIsBalanceCalcVisible] = useState(false)
-  const [balance, setBalance] = useState(currentInvoice.balance.toString())
-  const [addSum, setAddSum] = useState('0')
-  const [isAddSumCalcVisible, setIsAddSumCalcVisible] = useState(false)
-  const [isNeedToCalc, setIsNeedToCalc] = useState(false)
-  const [isWriteOffInvoiceVisible, setIsWriteOffInvoiceVisible] = useState(false)
-  const [isWriteOffCalcVisible, setIsWriteOffCalcVisible] = useState(false)
-  const [writeOffSum, setWriteOffSum] = useState('0')
+  const [balance, handleBalance, isBalanceCalcVisible, handleIsBalanceCalcVisible, isNeedCalcBalance] = useCalculator(currentInvoice.balance.toString())
+  const [addSum, handleAddSum, isAddSumCalcVisible, handleIsAddSumCalcVisible, isNeedCalcAddSum] = useCalculator('0')
+  const [writeOffSum, handleWriteOffSum, isWriteOffCalcVisible, handleIsWriteOffSumCalcVisible, isNeedCalcWriteOffSum] = useCalculator('0')
   const [toInvoiceName, setToInvoiceName] = useState('')
+  const [isWriteOffInvoiceVisible, setIsWriteOffInvoiceVisible] = useState(false)
 
   const totalBalance = calcBalance(invoice, 'All invoice') - currentInvoice.balance
   const invoiceWithoutCurrent = Object.fromEntries(Object.entries(invoice).filter(inv => inv[0] !== name))
 
   const navigate = useNavigate()
   const dispatch = useDispatch()
-
-  const handleSpendValue = (value) => {
-    handleCalcValue(value, setBalance)
-  }
-
-  const handleAddSumValue = (value) => {
-    handleCalcValue(value, setAddSum)
-  }
-
-  const handleWriteOffValue = (value) => {
-    handleCalcValue(value, setWriteOffSum)
-  }
 
   const onClose = (e) => {
     if (e.target.classList.contains('absolute')) {
@@ -52,22 +34,14 @@ const InvoiceMenu = ({ currentInvoice, name, handleIsMenuVisible, invoice }) => 
     navigate('/edit-invoice/' + name)
   }
 
-  const handleIsCalcVisible = () => {
-    setIsBalanceCalcVisible(prev => !prev)
-  }
-
-  const handleIsAddSumVisible = () => {
-    setIsAddSumCalcVisible(prev => !prev)
-  }
-
   const onBalanceChange = () => {
     dispatch(editInvoice({ invoice: name, title: name, color: currentInvoice.color, balance }))
-    handleIsCalcVisible()
+    handleIsBalanceCalcVisible()
   }
 
   const onAddSumToInvoice = () => {
     dispatch(addSumToInvoice({ invoice: name, sum: addSum }))
-    handleIsAddSumVisible()
+    handleIsAddSumCalcVisible()
   }
 
   const onGoToOperations = () => {
@@ -79,25 +53,16 @@ const InvoiceMenu = ({ currentInvoice, name, handleIsMenuVisible, invoice }) => 
     setIsWriteOffInvoiceVisible(prev => !prev)
   }
 
-  const handleIsWriteOfCalcVisible = () => {
-    setIsWriteOffCalcVisible(prev => !prev)
-  }
-
   const onSelectWriteOf = (selectedInvoice) => {
     handleIsWriteOffInvoiceVisible()
-    handleIsWriteOfCalcVisible()
+    handleIsWriteOffSumCalcVisible()
     setToInvoiceName(selectedInvoice)
   }
 
   const onWriteOff = () => {
     dispatch(writeOff({ from: name, to: toInvoiceName, sum: writeOffSum }))
-    handleIsWriteOfCalcVisible()
+    handleIsWriteOffSumCalcVisible()
   }
-
-  useEffect(() => {
-    const bool = isStringIncludesOperator(balance)
-    setIsNeedToCalc(bool)
-  }, [balance])
 
   return (
     <div
@@ -125,7 +90,7 @@ const InvoiceMenu = ({ currentInvoice, name, handleIsMenuVisible, invoice }) => 
           </div>
           <div
             className='flex flex-col items-center'
-            onClick={handleIsCalcVisible}
+            onClick={handleIsBalanceCalcVisible}
           >
             <div className='flex justify-center items-center bg-gray-300 p-3 rounded-full'>
               <SpinIcon className='h-6 w-6' />
@@ -145,7 +110,7 @@ const InvoiceMenu = ({ currentInvoice, name, handleIsMenuVisible, invoice }) => 
             <div className='flex flex-col items-center'>
               <div
                 className='flex justify-center items-center bg-green-300 p-3 rounded-full'
-                onClick={handleIsAddSumVisible}
+                onClick={handleIsAddSumCalcVisible}
               >
                 <TopUpIcon className='h-5 w-5 -rotate-90 fill-green-600' />
               </div>
@@ -171,11 +136,11 @@ const InvoiceMenu = ({ currentInvoice, name, handleIsMenuVisible, invoice }) => 
           </div>
           <Calculator
             spendValue={balance}
-            handleSpendValue={handleSpendValue}
+            handleSpendValue={handleBalance}
             addNewOperation={onBalanceChange}
             setIsCalendarVisible={() => { }}
             isCalendarVisible={false}
-            isNeedToCalc={isNeedToCalc}
+            isNeedToCalc={isNeedCalcBalance}
           />
         </div>
       )}
@@ -187,11 +152,11 @@ const InvoiceMenu = ({ currentInvoice, name, handleIsMenuVisible, invoice }) => 
           </div>
           <Calculator
             spendValue={addSum}
-            handleSpendValue={handleAddSumValue}
+            handleSpendValue={handleAddSum}
             addNewOperation={onAddSumToInvoice}
             setIsCalendarVisible={() => { }}
             isCalendarVisible={false}
-            isNeedToCalc={isNeedToCalc}
+            isNeedToCalc={isNeedCalcAddSum}
           />
         </div>
       )}
@@ -218,11 +183,11 @@ const InvoiceMenu = ({ currentInvoice, name, handleIsMenuVisible, invoice }) => 
           </div>
           <Calculator
             spendValue={writeOffSum}
-            handleSpendValue={handleWriteOffValue}
+            handleSpendValue={handleWriteOffSum}
             addNewOperation={onWriteOff}
             setIsCalendarVisible={() => { }}
             isCalendarVisible={false}
-            isNeedToCalc={isNeedToCalc}
+            isNeedToCalc={isNeedCalcWriteOffSum}
           />
         </div>
       )}
