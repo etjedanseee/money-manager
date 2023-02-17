@@ -1,19 +1,28 @@
 import React, { useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { NavLink, useNavigate } from 'react-router-dom'
+import { addNewOperation } from '../redux/actions/moneyActions'
+import { getCurrentDay } from '../utils/calcDate'
 import AddSpend from './AddSpend'
 
 const Categories = ({ sortedCategories, sortedColors, sortedTotalSum, isEditCategories }) => {
   const [isAddSpendVisible, setIsAddSpendVisible] = useState(false)
   const [currentCategory, setCurrentCategory] = useState(null)
+  const { invoice } = useSelector(state => state.money)
   const navigate = useNavigate()
+  const dispatch = useDispatch()
 
   const onCategoryClick = (category) => {
     if (isEditCategories) {
       navigate('edit-category/' + category)
     } else {
       setCurrentCategory(category)
-      setIsAddSpendVisible(true)
+      setIsAddSpendVisible(prev => !prev)
     }
+  }
+
+  const onAddNewOperation = (obj) => {
+    dispatch(addNewOperation(obj))
   }
 
   return (
@@ -44,7 +53,16 @@ const Categories = ({ sortedCategories, sortedColors, sortedTotalSum, isEditCate
           </div>
         </NavLink>
       )}
-      {isAddSpendVisible && <AddSpend setIsAddSpendVisible={setIsAddSpendVisible} category={currentCategory} />}
+      {isAddSpendVisible && (
+        <AddSpend
+          setIsAddSpendVisible={setIsAddSpendVisible}
+          category={currentCategory}
+          defaultInvoice={Object.keys(invoice)[0]}
+          defaultDescr=''
+          defaultDate={getCurrentDay()}
+          onConfirm={onAddNewOperation}
+          defaultId={Date.now()}
+        />)}
     </>
   )
 }

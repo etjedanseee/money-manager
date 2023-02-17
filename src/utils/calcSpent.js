@@ -1,110 +1,118 @@
 export const calcAll = (spent, categories, selectedDate, filterInvoiceBy) => {
-  const spentArr = [];
+  let categSum = {};
   if (selectedDate.length > 0) {
     const startDate = selectedDate[0];
     const endDate = selectedDate[1];
-    for (let categ in categories) {
-      let categSum = 0;
-      for (let date in spent[categ]) {
-        let dateSum = 0;
-        const parsedDate = new Date(Date.parse(date));
-        if ((parsedDate < startDate) || (parsedDate > endDate)) {
-          continue
-        }
-        for (let operation of spent[categ][date]) {
-          if (filterInvoiceBy === 'All invoice') {
-            dateSum += operation.sum
-          } else if (operation.payWith === filterInvoiceBy) {
-            dateSum += operation.sum
+    for (let date in spent) {
+      const parsedDate = new Date(Date.parse(date));
+      if ((parsedDate < startDate) || (parsedDate > endDate)) {
+        continue
+      }
+      for (let operation of spent[date]) {
+        if (filterInvoiceBy === 'All invoice') {
+          if (categSum[operation.category] !== undefined) {
+            categSum[operation.category] += operation.sum
+          } else {
+            categSum[operation.category] = operation.sum
+          }
+        } else if (operation.payWith === filterInvoiceBy) {
+          if (categSum[operation.category] !== undefined) {
+            categSum[operation.category] += operation.sum
+          } else {
+            categSum[operation.category] = operation.sum
           }
         }
-        categSum += dateSum;
       }
-      spentArr.push({ category: categ, sum: categSum, color: categories[categ] })
     }
   } else {
-    for (let categ in categories) {
-      let categSum = 0;
-      for (let date in spent[categ]) {
-        let dateSum = 0;
-        const parsedDate = new Date(Date.parse(date));
-        if (+parsedDate !== +selectedDate) {
-          continue
-        }
-        for (let operation of spent[categ][date]) {
-          if (filterInvoiceBy === 'All invoice') {
-            dateSum += operation.sum
-          } else if (operation.payWith === filterInvoiceBy) {
-            dateSum += operation.sum
+    for (let date in spent) {
+      const parsedDate = new Date(Date.parse(date));
+      if (+parsedDate !== +selectedDate) {
+        continue
+      }
+      for (let operation of spent[date]) {
+        if (filterInvoiceBy === 'All invoice') {
+          if (categSum[operation.category] !== undefined) {
+            categSum[operation.category] += operation.sum
+          } else {
+            categSum[operation.category] = operation.sum
+          }
+        } else if (operation.payWith === filterInvoiceBy) {
+          if (categSum[operation.category] !== undefined) {
+            categSum[operation.category] += operation.sum
+          } else {
+            categSum[operation.category] = operation.sum
           }
         }
-        categSum += dateSum;
       }
-      spentArr.push({ category: categ, sum: categSum, color: categories[categ] })
     }
   }
-  return sortData(spentArr)
+  return sortData(categSum, categories)
 }
 
-const sortData = (spentArr) => {
-  const sortedSpentArr = [...spentArr].sort((a, b) => a.sum > b.sum ? 1 : -1)
+const sortData = (categSum, categories) => {
+  const sortedCategSum = Object.fromEntries(Object.entries(categSum).sort((a, b) => a[1] > b[1] ? 1 : -1))
   const sortedCategories = []
   const sortedSum = []
   const sortedColors = []
 
-  for (let i = 0; i < sortedSpentArr.length; i++) {
-    sortedCategories[i] = sortedSpentArr[i].category
-    sortedSum[i] = sortedSpentArr[i].sum
-    sortedColors[i] = sortedSpentArr[i].color
+  for (let cat in categories) {
+    if (!categSum[cat]) {
+      sortedCategories.push(cat)
+      sortedSum.push(0)
+      sortedColors.push(categories[cat])
+    }
+  }
+
+  for (let key in sortedCategSum) {
+    sortedCategories.push(key)
+    sortedSum.push(categSum[key])
+    sortedColors.push(categories[key])
   }
   return [sortedCategories, sortedColors, sortedSum]
 }
 
-export const getOperations = (spent, categories, selectedDate, filterInvoiceBy) => {
+export const getOperations = (spent, selectedDate, filterInvoiceBy) => {
   const res = {}
   if (selectedDate.length > 0) {
     const startDate = selectedDate[0];
     const endDate = selectedDate[1];
-    for (let categ in categories) {
-      for (let date in spent[categ]) {
-        const parsedDate = new Date(Date.parse(date));
-        if ((parsedDate < startDate) || (parsedDate > endDate)) {
-          continue
+    for (let date in spent) {
+      const parsedDate = new Date(Date.parse(date));
+      if ((parsedDate < startDate) || (parsedDate > endDate)) {
+        continue
+      }
+      if (!res[date]) {
+        res[date] = {
+          operations: [],
+          totalSum: 0
         }
-        if (!res[date]) {
-          res[date] = {
-            operations: [],
-            totalSum: 0
-          }
-        }
-        for (let operation of spent[categ][date]) {
-          const operObj = { ...operation, category: categ, color: categories[categ] }
-          if (filterInvoiceBy === 'All invoice' || operation.payWith === filterInvoiceBy) {
-            res[date].operations.push(operObj)
-            res[date].totalSum += operObj.sum
-          }
+      }
+      for (let operation of spent[date]) {
+        const operObj = { ...operation }
+        if (filterInvoiceBy === 'All invoice' || operation.payWith === filterInvoiceBy) {
+          res[date].operations.push(operObj)
+          res[date].totalSum += operObj.sum
         }
       }
     }
   } else {
-    for (let categ in categories) {
-      for (let date in spent[categ]) {
-        const parsedDate = new Date(Date.parse(date));
-        if (+parsedDate !== +selectedDate) {
-          continue
+    for (let date in spent) {
+      const parsedDate = new Date(Date.parse(date));
+      if (+parsedDate !== +selectedDate) {
+        continue
+      }
+      if (!res[date]) {
+        res[date] = {
+          operations: [],
+          totalSum: 0
         }
-        if (!res[date]) {
-          res[date] = {
-            operations: [],
-            totalSum: 0
-          }
-        }
-        for (let operation of spent[categ][date]) {
-          const operObj = { ...operation, category: categ, color: categories[categ] }
-          if (filterInvoiceBy === 'All invoice' || operation.payWith === filterInvoiceBy) {
-            res[date].operations.push(operObj)
-            res[date].totalSum += operObj.sum
-          }
+      }
+      for (let operation of spent[date]) {
+        const operObj = { ...operation }
+        if (filterInvoiceBy === 'All invoice' || operation.payWith === filterInvoiceBy) {
+          res[date].operations.push(operObj)
+          res[date].totalSum += operObj.sum
         }
       }
     }
@@ -114,5 +122,12 @@ export const getOperations = (spent, categories, selectedDate, filterInvoiceBy) 
 
 const sortOperations = (operations) => {
   const sortedOperations = Object.entries(operations).sort((date1, date2) => new Date(date2[0]) - new Date(date1[0]))
-  return Object.fromEntries(sortedOperations)
+  const dateArr = []
+  const operArr = []
+  for (let i = 0; i < sortedOperations.length; i++) {
+    dateArr.push(sortedOperations[i][0])
+    operArr.push(sortedOperations[i][1])
+  }
+  // console.log(dateArr, operArr)
+  return [dateArr, operArr]
 }

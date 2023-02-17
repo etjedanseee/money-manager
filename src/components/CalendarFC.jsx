@@ -1,10 +1,9 @@
 import React, { useState } from 'react'
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
-import { getCurrentDay } from '../utils/calcDate';
 
-const CalendarFC = ({ isSelectRange, handleIsCalendarVisible }) => {
-  const [date, setDate] = useState(getCurrentDay());
+const CalendarFC = ({ isSelectRange, handleIsCalendarVisible, defaultDate }) => {
+  const [date, setDate] = useState(defaultDate);
 
   const sendDate = () => {
     handleIsCalendarVisible(date)

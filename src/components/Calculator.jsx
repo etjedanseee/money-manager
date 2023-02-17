@@ -12,7 +12,7 @@ import { isStringIncludesOperator } from '../utils/isStringIncludesOperator'
 import CalendarFC from './CalendarFC'
 import { calcExpression } from '../utils/calcExpression'
 
-const Calculator = ({ spendValue, handleSpendValue, addNewOperation, isCalendarVisible, setIsCalendarVisible, isNeedToCalc }) => {
+const Calculator = ({ spendValue, handleSpendValue, addNewOperation, isCalendarVisible, setIsCalendarVisible, isNeedToCalc, defaultDate }) => {
   const [selectedDate, setSelectedDate] = useState(getCurrentDay());
 
   const handleIsCalendarVisible = (date) => {
@@ -113,7 +113,7 @@ const Calculator = ({ spendValue, handleSpendValue, addNewOperation, isCalendarV
 
   return (
     <>
-      {isCalendarVisible && <CalendarFC isSelectRange={false} handleIsCalendarVisible={handleIsCalendarVisible} />}
+      {isCalendarVisible && <CalendarFC isSelectRange={false} handleIsCalendarVisible={handleIsCalendarVisible} defaultDate={defaultDate} />}
       <div className='w-full grid grid-rows-4 grid-cols-5 pb-14'>
         <div
           className='flex justify-center items-center border-2 border-gray-400 py-3'

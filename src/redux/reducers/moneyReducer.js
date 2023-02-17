@@ -1,5 +1,5 @@
 import { dateToString } from "../../utils/calcDate"
-import { ADD_NEW_CATEGORY, ADD_NEW_INVOICE, ADD_SPEND, ADD_SUM_TO_INVOICE, DELETE_CATEGORY, DELETE_INVOICE, EDIT_CATEGORY, EDIT_INVOICE, SET_FILTER_INVOICE_BY, SET_SORTED_SPENT, TOGGLE_IS_EDIT_CATEGORIES, WRITE_OFF } from "../actions/actionsConsts"
+import { ADD_NEW_CATEGORY, ADD_NEW_INVOICE, ADD_NEW_OPERATION, ADD_SUM_TO_INVOICE, DELETE_CATEGORY, DELETE_INVOICE, EDIT_CATEGORY, EDIT_INVOICE, EDIT_OPERATION, SET_FILTER_INVOICE_BY, SET_SORTED_SPENT, TOGGLE_IS_EDIT_CATEGORIES, WRITE_OFF } from "../actions/actionsConsts"
 import { dbSpent } from "../dbSpent"
 
 const initialState = {
@@ -15,21 +15,22 @@ const initialState = {
 
 export const moneyReducer = (state = initialState, action) => {
   switch (action.type) {
-    case ADD_SPEND: {
+    case ADD_NEW_OPERATION: {
       const date = action.payload.date
       const newSpent = {
         sum: action.payload.sum,
         payWith: action.payload.payWith,
         description: action.payload.description,
-        id: action.payload.id
+        id: action.payload.id,
+        category: action.payload.category
       }
-      if (state.spent[action.payload.category] && state.spent[action.payload.category][dateToString(date)]) {
-        const newArr = [...state.spent[action.payload.category][dateToString(date)], newSpent]
+      if (state.spent[dateToString(date)]) {
+        const newArr = [...state.spent[dateToString(date)], newSpent]
         return {
           ...state,
           spent: {
             ...state.spent,
-            [action.payload.category]: { ...state.spent[[action.payload.category]], [dateToString(date)]: newArr }
+            [dateToString(date)]: newArr
           },
           invoice: {
             ...state.invoice,
@@ -41,7 +42,7 @@ export const moneyReducer = (state = initialState, action) => {
           ...state,
           spent: {
             ...state.spent,
-            [action.payload.category]: { ...state.spent[[action.payload.category]], [dateToString(date)]: [newSpent] }
+            [dateToString(date)]: [newSpent]
           },
           invoice: {
             ...state.invoice,
@@ -200,6 +201,39 @@ export const moneyReducer = (state = initialState, action) => {
         }
       }
     }
+    case EDIT_OPERATION: {
+      const [obj, prevDateObj] = action.payload
+      const prevDate = dateToString(prevDateObj)
+      const objDate = dateToString(obj.date)
+      const oper = {
+        sum: parseFloat(obj.sum),
+        payWith: obj.payWith,
+        category: obj.category,
+        id: obj.id,
+        description: obj.description
+      }
+      if (prevDate !== objDate) {
+        const prevDateSpent = [...state.spent[prevDate]].filter(op => op.id !== obj.id)
+        return {
+          ...state,
+          spent: {
+            ...state.spent,
+            [prevDate]: [...prevDateSpent],
+            [objDate]: [...state.spent[objDate], oper]
+          }
+        }
+      } else {
+        const prevSpent = [...state.spent[objDate]].filter(op => op.id !== obj.id)
+        return {
+          ...state,
+          spent: {
+            ...state.spent,
+            [objDate]: [...prevSpent, oper]
+          }
+        }
+      }
+    }
+
     default: return state
   }
 }
