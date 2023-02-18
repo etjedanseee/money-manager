@@ -72,7 +72,7 @@ const sortData = (categSum, categories) => {
   return [sortedCategories, sortedColors, sortedSum]
 }
 
-export const getOperations = (spent, selectedDate, filterInvoiceBy) => {
+export const getOperations = (spent, selectedDate, filterInvoiceBy, search) => {
   const res = {}
   if (selectedDate.length > 0) {
     const startDate = selectedDate[0];
@@ -82,17 +82,19 @@ export const getOperations = (spent, selectedDate, filterInvoiceBy) => {
       if ((parsedDate < startDate) || (parsedDate > endDate)) {
         continue
       }
-      if (!res[date]) {
-        res[date] = {
-          operations: [],
-          totalSum: 0
-        }
-      }
       for (let operation of spent[date]) {
         const operObj = { ...operation }
         if (filterInvoiceBy === 'All invoice' || operation.payWith === filterInvoiceBy) {
-          res[date].operations.push(operObj)
-          res[date].totalSum += operObj.sum
+          if (search === '' || operation.description.toLowerCase().includes(search.toLowerCase())) {
+            if (!res[date]) {
+              res[date] = {
+                operations: [],
+                totalSum: 0
+              }
+            }
+            res[date].operations.push(operObj)
+            res[date].totalSum += operObj.sum
+          }
         }
       }
     }
@@ -102,17 +104,19 @@ export const getOperations = (spent, selectedDate, filterInvoiceBy) => {
       if (+parsedDate !== +selectedDate) {
         continue
       }
-      if (!res[date]) {
-        res[date] = {
-          operations: [],
-          totalSum: 0
-        }
-      }
       for (let operation of spent[date]) {
         const operObj = { ...operation }
         if (filterInvoiceBy === 'All invoice' || operation.payWith === filterInvoiceBy) {
-          res[date].operations.push(operObj)
-          res[date].totalSum += operObj.sum
+          if (search === '' || operation.description.toLowerCase().includes(search.toLowerCase())) {
+            if (!res[date]) {
+              res[date] = {
+                operations: [],
+                totalSum: 0
+              }
+            }
+            res[date].operations.push(operObj)
+            res[date].totalSum += operObj.sum
+          }
         }
       }
     }
@@ -128,6 +132,5 @@ const sortOperations = (operations) => {
     dateArr.push(sortedOperations[i][0])
     operArr.push(sortedOperations[i][1])
   }
-  // console.log(dateArr, operArr)
   return [dateArr, operArr]
 }

@@ -6,7 +6,7 @@ import PayWith from './PayWith'
 import { useCalculator } from '../hooks/useCalculator'
 import SelectCategory from './SelectCategory'
 
-const AddSpend = ({ setIsAddSpendVisible, category, defaultSpendValue, defaultInvoice, defaultDescr, onConfirm, defaultDate, defaultId }) => {
+const AddSpend = ({ handleIsAddSpendVisible, category, defaultSpendValue, defaultInvoice, defaultDescr, onConfirm, defaultDate, id }) => {
   const { invoice, categories } = useSelector(state => state.money)
   const [spendValue, handleSpendValue, isCalcVisible, handleIsCalcVisible, isNeedCalcSpendValue] = useCalculator(defaultSpendValue)
   const [currentInvoice, setCurrentInvoice] = useState(defaultInvoice)
@@ -25,18 +25,18 @@ const AddSpend = ({ setIsAddSpendVisible, category, defaultSpendValue, defaultIn
       category: currentCategory,
       date: isDateDirty ? date : defaultDate,
       description,
-      id: defaultId
+      id,
     }
     if (spendValue !== '0') {
       onConfirm(obj)
       handleSpendValue('0')
     }
-    setIsAddSpendVisible(false)
+    handleIsAddSpendVisible()
   }
 
   const closeAddSpend = (e) => {
     if (e.target.classList.contains('fixed')) {
-      setIsAddSpendVisible(false)
+      handleIsAddSpendVisible()
     }
   }
 

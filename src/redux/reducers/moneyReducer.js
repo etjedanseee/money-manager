@@ -16,40 +16,26 @@ const initialState = {
 export const moneyReducer = (state = initialState, action) => {
   switch (action.type) {
     case ADD_NEW_OPERATION: {
-      const date = action.payload.date
-      const newSpent = {
-        sum: action.payload.sum,
+      const date = dateToString(action.payload.date)
+      const operation = {
+        sum: parseFloat(action.payload.sum),
         payWith: action.payload.payWith,
         description: action.payload.description,
         id: action.payload.id,
         category: action.payload.category
       }
-      if (state.spent[dateToString(date)]) {
-        const newArr = [...state.spent[dateToString(date)], newSpent]
-        return {
-          ...state,
-          spent: {
-            ...state.spent,
-            [dateToString(date)]: newArr
-          },
-          invoice: {
-            ...state.invoice,
-            [action.payload.payWith]: state.invoice[action.payload.payWith].balance - action.payload.sum
-          }
-        }
-      } else {
-        return {
-          ...state,
-          spent: {
-            ...state.spent,
-            [dateToString(date)]: [newSpent]
-          },
-          invoice: {
-            ...state.invoice,
-            [action.payload.payWith]: {
-              ...state.invoice[action.payload.payWith],
-              balance: state.invoice[action.payload.payWith].balance - action.payload.sum
-            }
+      const newSpent = state.spent[date] ? [...state.spent[date], operation] : [operation]
+      return {
+        ...state,
+        spent: {
+          ...state.spent,
+          [date]: newSpent
+        },
+        invoice: {
+          ...state.invoice,
+          [operation.payWith]: {
+            ...state.invoice[operation.payWith],
+            balance: state.invoice[operation.payWith].balance - operation.sum
           }
         }
       }
@@ -219,7 +205,7 @@ export const moneyReducer = (state = initialState, action) => {
           spent: {
             ...state.spent,
             [prevDate]: [...prevDateSpent],
-            [objDate]: [...state.spent[objDate], oper]
+            [objDate]: [oper, ...state.spent[objDate]]
           }
         }
       } else {
@@ -228,7 +214,7 @@ export const moneyReducer = (state = initialState, action) => {
           ...state,
           spent: {
             ...state.spent,
-            [objDate]: [...prevSpent, oper]
+            [objDate]: [oper, ...prevSpent]
           }
         }
       }

@@ -17,12 +17,16 @@ const Categories = ({ sortedCategories, sortedColors, sortedTotalSum, isEditCate
       navigate('edit-category/' + category)
     } else {
       setCurrentCategory(category)
-      setIsAddSpendVisible(prev => !prev)
+      handleIsAddSpendVisible()
     }
   }
 
   const onAddNewOperation = (obj) => {
     dispatch(addNewOperation(obj))
+  }
+
+  const handleIsAddSpendVisible = () => {
+    setIsAddSpendVisible(prev => !prev)
   }
 
   return (
@@ -55,13 +59,13 @@ const Categories = ({ sortedCategories, sortedColors, sortedTotalSum, isEditCate
       )}
       {isAddSpendVisible && (
         <AddSpend
-          setIsAddSpendVisible={setIsAddSpendVisible}
+          handleIsAddSpendVisible={handleIsAddSpendVisible}
           category={currentCategory}
           defaultInvoice={Object.keys(invoice)[0]}
           defaultDescr=''
           defaultDate={getCurrentDay()}
           onConfirm={onAddNewOperation}
-          defaultId={Date.now()}
+          id={Date.now()}
         />)}
     </>
   )
