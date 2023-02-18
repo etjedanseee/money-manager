@@ -83,13 +83,6 @@ export const decreaseSumInvoice = (data) => {
   }
 }
 
-export const writeOff = (data) => {
-  return {
-    type: WRITE_OFF,
-    payload: data
-  }
-}
-
 export const editOperation = (data) => {
   return {
     type: EDIT_OPERATION,

@@ -6,7 +6,7 @@ import { ReactComponent as OperationsIcon } from '../assets/icons/operations.svg
 import { useNavigate } from 'react-router-dom'
 import Calculator from './Calculator'
 import { useDispatch } from 'react-redux'
-import { addSumToInvoice, editInvoice, setFilterInvoiceBy, writeOff } from '../redux/actions/moneyActions'
+import { addSumToInvoice, decreaseSumInvoice, editInvoice, setFilterInvoiceBy } from '../redux/actions/moneyActions'
 import InvoiceList from '../UI/InvoiceList'
 import { calcBalance } from '../utils/calcBalance'
 import { useCalculator } from '../hooks/useCalculator'
@@ -60,7 +60,8 @@ const InvoiceMenu = ({ currentInvoice, name, handleIsMenuVisible, invoice }) => 
   }
 
   const onWriteOff = () => {
-    dispatch(writeOff({ from: name, to: toInvoiceName, sum: writeOffSum }))
+    dispatch(addSumToInvoice({ invoice: toInvoiceName, sum: writeOffSum }))
+    dispatch(decreaseSumInvoice({ invoice: name, sum: writeOffSum }))
     handleIsWriteOffSumCalcVisible()
   }
 
