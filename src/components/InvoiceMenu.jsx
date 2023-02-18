@@ -42,6 +42,7 @@ const InvoiceMenu = ({ currentInvoice, name, handleIsMenuVisible, invoice }) => 
   const onAddSumToInvoice = () => {
     dispatch(addSumToInvoice({ invoice: name, sum: addSum }))
     handleIsAddSumCalcVisible()
+    handleIsMenuVisible()
   }
 
   const onGoToOperations = () => {

@@ -24,7 +24,7 @@ export const moneyReducer = (state = initialState, action) => {
         id: action.payload.id,
         category: action.payload.category
       }
-      const newSpent = state.spent[date] ? [...state.spent[date], operation] : [operation]
+      const newSpent = state.spent[date] ? [operation, ...state.spent[date]] : [operation]
       return {
         ...state,
         spent: {
@@ -62,24 +62,37 @@ export const moneyReducer = (state = initialState, action) => {
     }
     case EDIT_CATEGORY: {
       const newCategories = Object.entries(state.categories).filter(c => c[0] !== action.payload.category)
-      const prevSpentCategory = { ...state.spent[action.payload.category] }
-      const newSpent = Object.entries(state.spent).filter(c => c[0] !== action.payload.category)
+      const newSpent = {}
+      for (let date of Object.keys(state.spent)) {
+        newSpent[date] = []
+        for (let op of state.spent[date]) {
+          if (op.category === action.payload.category) {
+            newSpent[date].push({ ...op, category: action.payload.title })
+          } else {
+            newSpent[date].push(op)
+          }
+        }
+      }
       return {
         ...state,
         categories: { ...Object.fromEntries(newCategories), [action.payload.title]: action.payload.color },
-        spent: {
-          ...Object.fromEntries(newSpent),
-          [action.payload.title]: prevSpentCategory
-        }
+        spent: newSpent
       }
     }
     case DELETE_CATEGORY: {
-      const newCategories = Object.entries(state.categories).filter(c => c[0] !== action.payload)
-      const newSpent = Object.entries(state.spent).filter(c => c[0] !== action.payload)
-      return {
-        ...state,
-        categories: { ...Object.fromEntries(newCategories) },
-        spent: { ...Object.fromEntries(newSpent) }
+      if (Object.keys(state.categories).length > 1) {
+        const newCategories = Object.entries(state.categories).filter(c => c[0] !== action.payload)
+        const newSpent = {}
+        for (let date of Object.keys(state.spent)) {
+          newSpent[date] = state.spent[date].filter(op => op.category !== action.payload)
+        }
+        return {
+          ...state,
+          categories: { ...Object.fromEntries(newCategories) },
+          spent: newSpent
+        }
+      } else {
+        return state
       }
     }
     case TOGGLE_IS_EDIT_CATEGORIES: {
@@ -100,20 +113,17 @@ export const moneyReducer = (state = initialState, action) => {
       if (action.payload.invoice !== action.payload.title) {
         const newInvoice = Object.entries(state.invoice).filter(c => c[0] !== action.payload.invoice)
         const newSpent = {}
-        for (let cg of Object.keys(state.spent)) {
-          newSpent[cg] = {}
-          for (let date in state.spent[cg]) {
-            newSpent[cg][date] = []
-            for (let op of state.spent[cg][date]) {
-              if (op.payWith === action.payload.invoice) {
-                const newOp = {
-                  ...op,
-                  payWith: action.payload.title,
-                }
-                newSpent[cg][date].push(newOp)
-              } else {
-                newSpent[cg][date].push(op)
+        for (let date of Object.keys(state.spent)) {
+          newSpent[date] = []
+          for (let op of state.spent[date]) {
+            if (op.payWith === action.payload.invoice) {
+              const newOp = {
+                ...op,
+                payWith: action.payload.title,
               }
+              newSpent[date].push(newOp)
+            } else {
+              newSpent[date].push(op)
             }
           }
         }
@@ -123,7 +133,7 @@ export const moneyReducer = (state = initialState, action) => {
             ...Object.fromEntries(newInvoice),
             [action.payload.title]: { balance: parseFloat(action.payload.balance), color: action.payload.color }
           },
-          spent: { ...newSpent }
+          spent: newSpent
         }
       } else {
         return {
@@ -139,21 +149,18 @@ export const moneyReducer = (state = initialState, action) => {
       if (Object.keys(state.invoice).length > 1) {
         const newInvoice = Object.entries(state.invoice).filter(c => c[0] !== action.payload)
         const newSpent = {}
-        for (let cg of Object.keys(state.spent)) {
-          newSpent[cg] = {}
-          for (let date in state.spent[cg]) {
-            newSpent[cg][date] = []
-            for (let op of state.spent[cg][date]) {
-              if (op.payWith !== action.payload) {
-                newSpent[cg][date].push(op)
-              }
+        for (let date of Object.keys(state.spent)) {
+          newSpent[date] = []
+          for (let op of state.spent[date]) {
+            if (op.payWith !== action.payload) {
+              newSpent[date].push(op)
             }
           }
         }
         return {
           ...state,
           invoice: { ...Object.fromEntries(newInvoice) },
-          spent: { ...newSpent }
+          spent: newSpent
         }
       } else {
         return state
@@ -195,7 +202,7 @@ export const moneyReducer = (state = initialState, action) => {
         description: editedOp.description
       }
       if (prevDate !== newDate) {
-        const prevDateSpent = [...state.spent[prevDate]].filter(op => op.id !== editedOp.id)
+        const prevDateSpent = state.spent[prevDate].filter(op => op.id !== editedOp.id)
         return {
           ...state,
           spent: {
@@ -205,7 +212,7 @@ export const moneyReducer = (state = initialState, action) => {
           }
         }
       } else {
-        const prevSpent = [...state.spent[newDate]].filter(op => op.id !== editedOp.id)
+        const prevSpent = state.spent[newDate].filter(op => op.id !== editedOp.id)
         return {
           ...state,
           spent: {
