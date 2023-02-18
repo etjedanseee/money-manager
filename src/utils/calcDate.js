@@ -15,7 +15,7 @@ export const getYearName = (date) => {
 }
 
 export const getMonthName = (date) => {
-  return monthArr[date.getMonth()]
+  return monthArr[date.getMonth()] + ' ' + getYearName(date)
 }
 
 export const getWeekName = (d1, d2) => {

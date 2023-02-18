@@ -20,7 +20,7 @@ function App() {
 
   useEffect(() => {
     dispatch(setSortedSpent(calcAll(spent, categories, selectedDate, filterInvoiceBy)))
-  }, [categories, selectedDate, typeDateName, spent, filterInvoiceBy, dispatch])
+  }, [categories, selectedDate, spent, filterInvoiceBy, dispatch])
 
   return (
     <div className='bg-black min-h-screen overflow-hidden'>

@@ -4,8 +4,6 @@ import Diagram from '../UI/Diagram'
 import Header from '../components/Header'
 
 const Home = ({ typeDateName, sortedCategories, sortedColors, sortedTotalSum, isEditCategories }) => {
-
-
   return (
     <div className='pt-20'>
       <Header

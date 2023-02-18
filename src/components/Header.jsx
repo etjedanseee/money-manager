@@ -7,7 +7,7 @@ import { ReactComponent as ArrowBack } from '../assets/icons/arrow-back.svg'
 import { ReactComponent as SearchIcon } from '../assets/icons/search.svg'
 import { prevOrNextSelectedDate, setSelectedDate, setTypeDateName } from '../redux/actions/dateActions';
 import { useDispatch } from 'react-redux';
-import { getDayName, getRangeName } from '../utils/calcDate'
+import { getCurrentDay, getDayName, getRangeName } from '../utils/calcDate'
 import Invoice from './Invoice'
 import { toggleIsEditCategories } from '../redux/actions/moneyActions'
 
@@ -18,6 +18,7 @@ const Header = ({ typeDateName, isEditCategories, isSearchVisible, handleIsSearc
   const [isSelectRange, setIsSelectRange] = useState(false)
   const searchRef = useRef(null)
   const dispatch = useDispatch()
+  const currentDay = getCurrentDay()
 
   const handleIsSelectDateVisible = () => {
     setIsSelectDateVisible(prev => !prev)
@@ -26,7 +27,7 @@ const Header = ({ typeDateName, isEditCategories, isSearchVisible, handleIsSearc
   const handleIsCalendarVisible = (date) => {
     setIsCalendarVisible(prev => !prev)
     if (date) {
-      if (date.length > 0) {
+      if (date?.length > 0) {
         dispatch(setTypeDateName([getRangeName(date[0], date[1]), 'range']))
       } else {
         dispatch(setTypeDateName([getDayName(date), 'day']))
@@ -164,7 +165,13 @@ const Header = ({ typeDateName, isEditCategories, isSearchVisible, handleIsSearc
                   setIsSelectRange={setIsSelectRange}
                 />
               )}
-              {isCalendarVisible && <CalendarFC handleIsCalendarVisible={handleIsCalendarVisible} isSelectRange={isSelectRange} />}
+              {isCalendarVisible && (
+                <CalendarFC
+                  handleIsCalendarVisible={handleIsCalendarVisible}
+                  isSelectRange={isSelectRange}
+                  defaultDate={isSelectRange ? [currentDay, currentDay] : currentDay}
+                />
+              )}
             </>
           )
         }

@@ -3,9 +3,9 @@ import { ADD_NEW_CATEGORY, ADD_NEW_INVOICE, ADD_NEW_OPERATION, ADD_SUM_TO_INVOIC
 import { dbSpent } from "../dbSpent"
 
 const initialState = {
-  invoice: { Cash: { balance: 3000, color: '#4efe00' }, Card: { balance: 5000, color: '#ed2ae3' }, CardX: { balance: -200, color: '#051cfa' } },
+  invoice: { Cash: { balance: 3000, color: '#4efe00' }, Card: { balance: 5000, color: '#ed2ae3' }, CardX: { balance: -200, color: '#fffe12' } },
   filterInvoiceBy: 'All invoice',
-  categories: { Food: '#4ba5f2', Rest: '#f84984', Housing: '#2e393f', Health: '#49ad51', Cafe: '#4758b4', Purchases: '#7c5c4f', Pets: '#7a4ef7', Gifts: '#f35353', Relations: '#ef4981', Transport: '#f4a642' },
+  categories: { Food: '#fffe12', Rest: '#f84984', Housing: '#2e393f', Health: '#49ad51', Cafe: '#4758b4', Purchases: '#7c5c4f', Pets: '#ffa628', Gifts: '#f35353', Relations: '#ef4981', Transport: '#f4a642' },
   spent: { ...dbSpent },
   isEditCategories: false,
   sortedCategories: [],
