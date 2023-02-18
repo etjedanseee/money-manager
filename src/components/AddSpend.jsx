@@ -20,7 +20,7 @@ const AddSpend = ({ handleIsAddSpendVisible, category, defaultSpendValue, defaul
 
   const addNewOperation = (date) => {
     const obj = {
-      sum: parseFloat(spendValue),
+      sum: spendValue,
       payWith: currentInvoice,
       category: currentCategory,
       date: isDateDirty ? date : defaultDate,

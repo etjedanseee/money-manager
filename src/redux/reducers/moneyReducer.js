@@ -1,5 +1,5 @@
 import { dateToString } from "../../utils/calcDate"
-import { ADD_NEW_CATEGORY, ADD_NEW_INVOICE, ADD_NEW_OPERATION, ADD_SUM_TO_INVOICE, DELETE_CATEGORY, DELETE_INVOICE, EDIT_CATEGORY, EDIT_INVOICE, EDIT_OPERATION, SET_FILTER_INVOICE_BY, SET_SORTED_SPENT, TOGGLE_IS_EDIT_CATEGORIES, WRITE_OFF } from "../actions/actionsConsts"
+import { ADD_NEW_CATEGORY, ADD_NEW_INVOICE, ADD_NEW_OPERATION, ADD_SUM_TO_INVOICE, DECREASE_SUM_INVOICE, DELETE_CATEGORY, DELETE_INVOICE, EDIT_CATEGORY, EDIT_INVOICE, EDIT_OPERATION, SET_FILTER_INVOICE_BY, SET_SORTED_SPENT, TOGGLE_IS_EDIT_CATEGORIES, WRITE_OFF } from "../actions/actionsConsts"
 import { dbSpent } from "../dbSpent"
 
 const initialState = {
@@ -171,6 +171,18 @@ export const moneyReducer = (state = initialState, action) => {
         }
       }
     }
+    case DECREASE_SUM_INVOICE: {
+      return {
+        ...state,
+        invoice: {
+          ...state.invoice,
+          [action.payload.invoice]: {
+            ...state.invoice[action.payload.invoice],
+            balance: state.invoice[action.payload.invoice].balance - parseFloat(action.payload.sum)
+          }
+        }
+      }
+    }
     case WRITE_OFF: {
       return {
         ...state,
@@ -188,33 +200,33 @@ export const moneyReducer = (state = initialState, action) => {
       }
     }
     case EDIT_OPERATION: {
-      const [obj, prevDateObj] = action.payload
-      const prevDate = dateToString(prevDateObj)
-      const objDate = dateToString(obj.date)
+      const [editedOp, operation] = action.payload
+      const prevDate = dateToString(new Date(operation.date))
+      const newDate = dateToString(editedOp.date)
       const oper = {
-        sum: parseFloat(obj.sum),
-        payWith: obj.payWith,
-        category: obj.category,
-        id: obj.id,
-        description: obj.description
+        sum: parseFloat(editedOp.sum),
+        payWith: editedOp.payWith,
+        category: editedOp.category,
+        id: editedOp.id,
+        description: editedOp.description
       }
-      if (prevDate !== objDate) {
-        const prevDateSpent = [...state.spent[prevDate]].filter(op => op.id !== obj.id)
+      if (prevDate !== newDate) {
+        const prevDateSpent = [...state.spent[prevDate]].filter(op => op.id !== editedOp.id)
         return {
           ...state,
           spent: {
             ...state.spent,
             [prevDate]: [...prevDateSpent],
-            [objDate]: [oper, ...state.spent[objDate]]
+            [newDate]: [oper, ...state.spent[newDate]]
           }
         }
       } else {
-        const prevSpent = [...state.spent[objDate]].filter(op => op.id !== obj.id)
+        const prevSpent = [...state.spent[newDate]].filter(op => op.id !== editedOp.id)
         return {
           ...state,
           spent: {
             ...state.spent,
-            [objDate]: [oper, ...prevSpent]
+            [newDate]: [oper, ...prevSpent]
           }
         }
       }

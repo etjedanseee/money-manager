@@ -1,14 +1,25 @@
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { editOperation } from '../redux/actions/moneyActions'
+import { addSumToInvoice, decreaseSumInvoice, editOperation } from '../redux/actions/moneyActions'
 import AddSpend from './AddSpend'
 
 const OperationItem = ({ operation, handleIsOperationVisible }) => {
   const [isAddSpendVisible, setIsAddSpendVisible] = useState(true)
   const dispatch = useDispatch()
 
-  const onEditSpend = (obj) => {
-    dispatch(editOperation([obj, new Date(operation.date)]))
+  const onEditSpend = (editedOp) => {
+    dispatch(editOperation([editedOp, operation]))
+    if (editedOp.payWith !== operation.payWith) {
+      dispatch(decreaseSumInvoice({ invoice: editedOp.payWith, sum: editedOp.sum }))
+      dispatch(addSumToInvoice({ invoice: operation.payWith, sum: operation.sum }))
+    } else {
+      const difference = parseFloat(editedOp.sum) - parseFloat(operation.sum)
+      if (difference > 0) {
+        dispatch(decreaseSumInvoice({ invoice: editedOp.payWith, sum: difference.toString() }))
+      } else if (difference < 0) {
+        dispatch(addSumToInvoice({ invoice: editedOp.payWith, sum: difference.toString() }))
+      }
+    }
   }
 
   const handleIsAddSpendVisible = () => {
