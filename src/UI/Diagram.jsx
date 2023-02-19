@@ -16,7 +16,7 @@ const Diagram = ({ sortedColors, sortedTotalSum }) => {
   }
 
   return (
-    <div className='h-60 col-start-2 col-end-4 row-start-2 row-end-4'><Doughnut data={doughnutConfig} /></div>
+    <div className='h-60 max-[37px]:h-52 col-start-2 col-end-4 row-start-2 row-end-4'><Doughnut data={doughnutConfig} /></div>
   )
 }
 

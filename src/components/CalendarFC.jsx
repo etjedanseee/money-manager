@@ -11,12 +11,12 @@ const CalendarFC = ({ isSelectRange, handleIsCalendarVisible, defaultDate }) => 
 
   return (
     <div
-      className='absolute top-0 left-0 px-6 h-screen w-full bg-black bg-opacity-90 flex items-center justify-center'>
+      className='absolute top-0 left-0 px-6 h-screen w-full bg-black bg-opacity-80 flex items-center justify-center'>
       <div className='bg-white text-black flex flex-col items-center pb-5 rounded-xl'>
         <Calendar
           showNeighboringMonth={false}
           selectRange={isSelectRange}
-          className='text-center rounded-xl'
+          className='text-center rounded-xl max-[376px]:text-xs'
           onChange={setDate}
           value={date}
         />

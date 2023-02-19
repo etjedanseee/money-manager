@@ -37,10 +37,12 @@ const Categories = ({ sortedCategories, sortedColors, sortedTotalSum, isEditCate
           className='place-self-center flex flex-col justify-center items-center'
           onClick={() => onCategoryClick(cat)}
         >
-          <div className='text-lg font-medium text-ellipsis max-w-[90px] overflow-hidden'>{cat}</div>
+          <div className='text-lg font-medium text-ellipsis max-w-[90px] truncate overflow-hidden max-[375px]:text-base max-[375px]:max-w-[70px]'>
+            {cat}
+          </div>
           <div
             style={{ borderColor: sortedColors[i] }}
-            className='border-4 rounded-full w-14 h-14 flex justify-center items-center text-xs font-medium'
+            className='border-4 rounded-full w-14 h-14 max-[351px]:w-12 max-[351px]:h-12 flex justify-center items-center text-xs font-medium'
           >
             {sortedTotalSum[i] !== 0 ? ` ${sortedTotalSum[i]}$` : '0'}
           </div>
@@ -52,7 +54,7 @@ const Categories = ({ sortedCategories, sortedColors, sortedTotalSum, isEditCate
           className='place-self-center flex flex-col justify-center items-center'
         >
           <div className='text-lg font-medium text-transparent'>new</div>
-          <div className='border-2 border-dashed border-gray-500 rounded-full w-14 h-14 flex justify-center items-center'>
+          <div className='border-2 border-dashed border-gray-500 rounded-full w-14 h-14 max-[351px]:w-12 max-[351px]:h-12 flex justify-center items-center'>
             <div className='text-3xl mb-[6px] text-gray-500'>+</div>
           </div>
         </NavLink>

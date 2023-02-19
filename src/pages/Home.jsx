@@ -5,7 +5,7 @@ import Header from '../components/Header'
 
 const Home = ({ typeDateName, sortedCategories, sortedColors, sortedTotalSum, isEditCategories }) => {
   return (
-    <div className='pt-20'>
+    <div className='pt-20 pb-14 w-full'>
       <Header
         typeDateName={typeDateName}
         isEditCategories={isEditCategories}
@@ -14,7 +14,7 @@ const Home = ({ typeDateName, sortedCategories, sortedColors, sortedTotalSum, is
         isSearchButton={false}
         handleSearchOperations={() => { }}
       />
-      <div className='grid grid-cols-4 grid-rows-4 grid-flow-row-dense gap-2'>
+      <div className='grid grid-cols-4 grid-rows-4 grid-flow-row-dense gap-2 max-[375px]:gap-1'>
         <Categories
           sortedCategories={sortedCategories}
           sortedColors={sortedColors}

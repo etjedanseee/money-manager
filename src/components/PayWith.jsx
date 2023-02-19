@@ -15,7 +15,7 @@ const PayWith = ({ invoice, currentInvoice, handleInvoiceChoose, title, handlePa
 
   return (
     <div
-      className='absolute top-0 left-0 h-screen w-full bg-black bg-opacity-90 flex justify-center items-center px-6'
+      className='absolute top-0 left-0 h-screen w-full bg-black bg-opacity-80 flex justify-center items-center px-6 max-[37px]:px-3'
       onClick={closePayWith}
     >
       <div className='w-full bg-white text-center rounded-xl'>

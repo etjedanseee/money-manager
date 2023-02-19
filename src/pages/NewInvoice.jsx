@@ -1,16 +1,15 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import Calculator from '../components/Calculator'
 import InvoiceOrCategoryItem from '../components/InvoiceOrCategoryItem'
+import { useCalculator } from '../hooks/useCalculator'
 import { addNewInvoice } from '../redux/actions/moneyActions'
-import { isStringIncludesOperator } from '../utils/isStringIncludesOperator'
 
 const NewInvoice = ({ invoice }) => {
+  const [balance, handleBalance, isCalcVisible, handleCalcVisible, isNeedToCalc] = useCalculator('0')
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  const [balance, setBalance] = useState('0')
-  const [isNeedToCalc, setIsNeedToCalc] = useState(false)
 
   const onConfirm = (title, titleError, color) => {
     if (!titleError) {
@@ -22,25 +21,6 @@ const NewInvoice = ({ invoice }) => {
   const onClose = () => {
     navigate('/invoice')
   }
-
-  const handleSpendValue = (value) => {
-    if (value[0] === '0') {
-      if (value.length === 2 && value[1] !== '.') {
-        setBalance(value.slice(1))
-      } else if (value[1] === '.') {
-        setBalance(value)
-      } else {
-        setBalance('0')
-      }
-    } else {
-      setBalance(value)
-    }
-  }
-
-  useEffect(() => {
-    const bool = isStringIncludesOperator(balance)
-    setIsNeedToCalc(bool)
-  }, [balance])
 
   return (
     <>
@@ -60,7 +40,7 @@ const NewInvoice = ({ invoice }) => {
         </div>
         <Calculator
           spendValue={balance}
-          handleSpendValue={handleSpendValue}
+          handleSpendValue={handleBalance}
           addNewOperation={() => { }}
           setIsCalendarVisible={() => { }}
           isCalendarVisible={false}

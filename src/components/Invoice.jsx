@@ -12,7 +12,7 @@ const Invoice = () => {
   const dispatch = useDispatch()
 
   const invoiseAndAllInvoice = {
-    'All invoice': calcBalance(invoice, 'All invoice'),
+    'All invoice': { balance: calcBalance(invoice, 'All invoice'), color: '#ed752c' },
     ...invoice,
   }
 

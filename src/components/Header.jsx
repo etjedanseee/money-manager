@@ -68,7 +68,7 @@ const Header = ({ typeDateName, isEditCategories, isSearchVisible, handleIsSearc
     <>
       {isSearchVisible && (
         <div className='fixed top-0 max-w-md w-full z-10 bg-opacity-100 bg-[#5c6bc0] text-white flex items-center px-4'>
-          <div className='w-full flex justify-between items-center flex-wrap  gap-x-6 pt-4 pb-8'>
+          <div className='w-full flex justify-between items-center flex-wrap gap-x-6 pt-4 pb-8'>
             <div
               className='flex-initial -mb-1'
               onClick={handleIsSearchVisible}
@@ -144,7 +144,7 @@ const Header = ({ typeDateName, isEditCategories, isSearchVisible, handleIsSearc
                   <div className='flex justify-center'>
                     <div
                       onClick={handleIsSelectDateVisible}
-                      className='px-4'
+                      className='px-4 max-[375px]:text-sm'
                     >
                       {typeDateName}
                     </div>

@@ -193,7 +193,7 @@ export const moneyReducer = (state = initialState, action) => {
     case EDIT_OPERATION: {
       const [editedOp, operation] = action.payload
       const prevDate = dateToString(new Date(operation.date))
-      const newDate = dateToString(editedOp.date)
+      const newDate = dateToString(new Date(editedOp.date))
       const oper = {
         sum: parseFloat(editedOp.sum),
         payWith: editedOp.payWith,
@@ -203,12 +203,23 @@ export const moneyReducer = (state = initialState, action) => {
       }
       if (prevDate !== newDate) {
         const prevDateSpent = state.spent[prevDate].filter(op => op.id !== editedOp.id)
-        return {
-          ...state,
-          spent: {
-            ...state.spent,
-            [prevDate]: [...prevDateSpent],
-            [newDate]: [oper, ...state.spent[newDate]]
+        if (state.spent[newDate]) {
+          return {
+            ...state,
+            spent: {
+              ...state.spent,
+              [prevDate]: [...prevDateSpent],
+              [newDate]: [oper, ...state.spent[newDate]]
+            }
+          }
+        } else {
+          return {
+            ...state,
+            spent: {
+              ...state.spent,
+              [prevDate]: [...prevDateSpent],
+              [newDate]: [oper]
+            }
           }
         }
       } else {

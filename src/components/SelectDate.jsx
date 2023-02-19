@@ -61,20 +61,20 @@ const SelectDate = ({ handleIsCalendarVisible, handleIsSelectDateVisible, setIsS
 
   return (
     <div
-      className='absolute top-0 left-0 px-6 h-screen w-full bg-black bg-opacity-90 flex items-center justify-center'
+      className='absolute top-0 left-0 px-6 max-[375px]:px-3 h-screen w-full bg-black bg-opacity-80 flex items-center justify-center'
       onClick={e => closeSelectDate(e)}
     >
       <div className='w-full bg-white rounded-xl text-center grid grid-cols-2 grid-rows-4 text-black'>
         <div
           onClick={onSelectRangeClick}
-          className={`${typeDate === 'range' ? 'bg-[#5c6bc0]' : 'bg-white'} 
+          className={`${typeDate === 'range' ? 'bg-[#5c6bc0] text-white font-medium' : 'bg-white text-black'} 
           col-start-1 col-end-3 flex flex-col items-center py-2 border-b-2 border-gray-300`}
         >
           <img src={CalendarIcon} className='h-6' alt="" />
           <div className='text-lg'>Select range</div>
         </div>
         <div
-          className={`${typeDate === 'all time' ? 'bg-[#5c6bc0]' : 'bg-white'} 
+          className={`${typeDate === 'all time' ? 'bg-[#5c6bc0] text-white font-medium' : 'bg-white text-black'} 
           flex flex-col items-center py-2 border-r-2 border-b-2 border-gray-300`}
           onClick={onAllTimeClick}
         >
@@ -82,7 +82,7 @@ const SelectDate = ({ handleIsCalendarVisible, handleIsSelectDateVisible, setIsS
           <div>All time</div>
         </div>
         <div
-          className={`${typeDate === 'day' ? 'bg-[#5c6bc0]' : 'bg-white'}
+          className={`${typeDate === 'day' ? 'bg-[#5c6bc0] text-white font-medium' : 'bg-white text-black'}
           flex flex-col items-center py-2 border-b-2 border-gray-300`}
           onClick={onSelectDayClick}
         >
@@ -90,7 +90,7 @@ const SelectDate = ({ handleIsCalendarVisible, handleIsSelectDateVisible, setIsS
           <div>Select day</div>
         </div>
         <div
-          className={`${typeDate === 'week' ? 'bg-[#5c6bc0]' : 'bg-white'}
+          className={`${typeDate === 'week' ? 'bg-[#5c6bc0] text-white font-medium' : 'bg-white text-black'}
           flex flex-col items-center py-2 border-r-2 border-b-2 border-gray-300`}
           onClick={onWeekClick}
         >
@@ -98,7 +98,7 @@ const SelectDate = ({ handleIsCalendarVisible, handleIsSelectDateVisible, setIsS
           <div>Week</div>
         </div>
         <div
-          className={`${typeDate === 'today' ? 'bg-[#5c6bc0]' : 'bg-white'}
+          className={`${typeDate === 'today' ? 'bg-[#5c6bc0] text-white font-medium' : 'bg-white text-black'}
           flex flex-col items-center py-2 border-b-2 border-gray-300`}
           onClick={onTodayClick}
         >
@@ -106,7 +106,7 @@ const SelectDate = ({ handleIsCalendarVisible, handleIsSelectDateVisible, setIsS
           <div>Today</div>
         </div>
         <div
-          className={`${typeDate === 'year' ? 'bg-[#5c6bc0]' : 'bg-white'}
+          className={`${typeDate === 'year' ? 'bg-[#5c6bc0] text-white font-medium' : 'bg-white text-black'}
           flex flex-col items-center py-2 border-r-2  border-gray-300`}
           onClick={onYearClick}
         >
@@ -114,7 +114,7 @@ const SelectDate = ({ handleIsCalendarVisible, handleIsSelectDateVisible, setIsS
           <div>Year</div>
         </div>
         <div
-          className={`${typeDate === 'month' ? 'bg-[#5c6bc0]' : 'bg-white'}
+          className={`${typeDate === 'month' ? 'bg-[#5c6bc0] text-white font-medium' : 'bg-white text-black'}
           flex flex-col items-center py-2 border-l-2 border-l-gray-100`}
           onClick={onMonthClick}
         >

@@ -17,7 +17,7 @@ const OperationItem = ({ operation, handleIsOperationVisible }) => {
       if (difference > 0) {
         dispatch(decreaseSumInvoice({ invoice: editedOp.payWith, sum: difference.toString() }))
       } else if (difference < 0) {
-        dispatch(addSumToInvoice({ invoice: editedOp.payWith, sum: difference.toString() }))
+        dispatch(addSumToInvoice({ invoice: editedOp.payWith, sum: difference.toString().slice(1) }))
       }
     }
   }

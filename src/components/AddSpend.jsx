@@ -27,7 +27,7 @@ const AddSpend = ({ handleIsAddSpendVisible, category, defaultSpendValue, defaul
       description,
       id,
     }
-    if (spendValue !== '0') {
+    if (spendValue !== '0' && spendValue.length < 6) {
       onConfirm(obj)
       handleSpendValue('0')
     }

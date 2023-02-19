@@ -7,7 +7,7 @@ const Confirm = ({ setIsConfirmVisible, message, resultCalb }) => {
   }
 
   return (
-    <div className='absolute top-2 left-0 w-full z-30 px-5'>
+    <div className='absolute top-2 left-0 w-full z-30 px-5 max-[375px]:px-3'>
       <div className='py-5 px-4 bg-teal-300 flex flex-col justify-center items-center text-center rounded-xl border-2 border-black'>
         <div className='mb-3 text-lg font-medium'>{message}</div>
         <div className='flex items-center gap-x-5 text-xl'>

@@ -68,13 +68,13 @@ const InvoiceMenu = ({ currentInvoice, name, handleIsMenuVisible, invoice }) => 
 
   return (
     <div
-      className='absolute top-0 left-0 w-full bg-black opacity-90 min-h-screen flex flex-col items-center justify-end pb-14'
+      className='absolute top-0 left-0 w-full bg-black bg-opacity-80 min-h-screen flex flex-col items-center justify-end pb-14'
       onClick={onClose}
     >
-      <div className='w-full px-2 text-white font-medium opacity-100 relative flex flex-col'>
+      <div className='w-full px-2 text-white font-medium relative flex flex-col'>
         <div
           style={{ backgroundColor: currentInvoice.color }}
-          className='flex flex-col items-center rounded-lg pb-4 opacity-100'
+          className='flex flex-col items-center rounded-lg pb-4'
         >
           <div className='w-full px-4 py-4 text-xl'>{name}</div>
           <div className='text-sm mb-1'>Account balance</div>
@@ -163,7 +163,7 @@ const InvoiceMenu = ({ currentInvoice, name, handleIsMenuVisible, invoice }) => 
         </div>
       )}
       {isWriteOffInvoiceVisible && (
-        <div className='w-full mt-5 px-2'>
+        <div className='w-full mt-3 px-2'>
           <div className='bg-white px-4 py-3'>
             <InvoiceList
               invoice={invoiceWithoutCurrent}
