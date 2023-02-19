@@ -18,7 +18,7 @@ const Operations = () => {
 
   const onEditOperations = (op, date) => {
     handleIsOperationVisible()
-    setOperation({ ...op, date })
+    setOperation({ ...op, date: new Date(date) })
   }
 
   const handleIsOperationVisible = () => {

@@ -51,7 +51,7 @@ const Categories = ({ sortedCategories, sortedColors, sortedTotalSum, isEditCate
       {sortedCategories?.length < 12 && (
         <NavLink
           to='/new-category'
-          className='place-self-center flex flex-col justify-center items-center'
+          className='place-self-center flex flex-col justify-center items-center -mt-1'
         >
           <div className='text-lg font-medium text-transparent'>new</div>
           <div className='border-2 border-dashed border-gray-500 rounded-full w-14 h-14 max-[351px]:w-12 max-[351px]:h-12 flex justify-center items-center'>
@@ -67,6 +67,9 @@ const Categories = ({ sortedCategories, sortedColors, sortedTotalSum, isEditCate
           defaultDescr=''
           defaultDate={getCurrentDay()}
           onConfirm={onAddNewOperation}
+          isEditOp={false}
+          onDelete={() => { }}
+          onDuplicate={() => { }}
           id={Date.now()}
         />)}
     </>

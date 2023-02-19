@@ -1,5 +1,5 @@
 import { dateToString } from "../../utils/calcDate"
-import { ADD_NEW_CATEGORY, ADD_NEW_INVOICE, ADD_NEW_OPERATION, ADD_SUM_TO_INVOICE, DECREASE_SUM_INVOICE, DELETE_CATEGORY, DELETE_INVOICE, EDIT_CATEGORY, EDIT_INVOICE, EDIT_OPERATION, SET_FILTER_INVOICE_BY, SET_SORTED_SPENT, TOGGLE_IS_EDIT_CATEGORIES } from "../actions/actionsConsts"
+import { ADD_NEW_CATEGORY, ADD_NEW_INVOICE, ADD_NEW_OPERATION, ADD_SUM_TO_INVOICE, DECREASE_SUM_INVOICE, DELETE_CATEGORY, DELETE_INVOICE, DELETE_OPERATION, EDIT_CATEGORY, EDIT_INVOICE, EDIT_OPERATION, SET_FILTER_INVOICE_BY, SET_SORTED_SPENT, TOGGLE_IS_EDIT_CATEGORIES } from "../actions/actionsConsts"
 import { dbSpent } from "../dbSpent"
 
 const initialState = {
@@ -230,6 +230,21 @@ export const moneyReducer = (state = initialState, action) => {
             ...state.spent,
             [newDate]: [oper, ...prevSpent]
           }
+        }
+      }
+    }
+    case DELETE_OPERATION: {
+      const { id, sum, date, payWith } = action.payload
+      const newSpent = state.spent[dateToString(new Date(date))].filter(op => op.id !== id)
+      return {
+        ...state,
+        spent: {
+          ...state.spent,
+          [dateToString(new Date(date))]: newSpent
+        },
+        invoice: {
+          ...state.invoice,
+          [payWith]: { ...state.invoice[payWith], balance: state.invoice[payWith].balance + sum }
         }
       }
     }

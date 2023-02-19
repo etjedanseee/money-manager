@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { addSumToInvoice, decreaseSumInvoice, editOperation } from '../redux/actions/moneyActions'
+import { addNewOperation, addSumToInvoice, decreaseSumInvoice, deleteOperation, editOperation } from '../redux/actions/moneyActions'
 import AddSpend from './AddSpend'
 
 const OperationItem = ({ operation, handleIsOperationVisible }) => {
@@ -27,6 +27,15 @@ const OperationItem = ({ operation, handleIsOperationVisible }) => {
     handleIsOperationVisible()
   }
 
+  const onDeleteOperation = () => {
+    dispatch(deleteOperation(operation))
+    handleIsOperationVisible()
+  }
+
+  const onDuplicateOperation = () => {
+    dispatch(addNewOperation({ ...operation, id: Date.now() }))
+  }
+
   return (
     <>
       {isAddSpendVisible && <AddSpend
@@ -38,6 +47,9 @@ const OperationItem = ({ operation, handleIsOperationVisible }) => {
         onConfirm={onEditSpend}
         handleIsAddSpendVisible={handleIsAddSpendVisible}
         id={operation.id}
+        isEditOp={true}
+        onDelete={onDeleteOperation}
+        onDuplicate={onDuplicateOperation}
       />
       }
     </>

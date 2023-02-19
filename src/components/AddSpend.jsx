@@ -5,8 +5,10 @@ import Calculator from './Calculator'
 import PayWith from './PayWith'
 import { useCalculator } from '../hooks/useCalculator'
 import SelectCategory from './SelectCategory'
+import { ReactComponent as DeleteIcon } from '../assets/icons/delete.svg'
+import { ReactComponent as DuplicateIcon } from '../assets/icons/duplicate.svg'
 
-const AddSpend = ({ handleIsAddSpendVisible, category, defaultSpendValue, defaultInvoice, defaultDescr, onConfirm, defaultDate, id }) => {
+const AddSpend = ({ handleIsAddSpendVisible, category, defaultSpendValue, defaultInvoice, defaultDescr, onConfirm, defaultDate, id, isEditOp, onDelete, onDuplicate }) => {
   const { invoice, categories } = useSelector(state => state.money)
   const [spendValue, handleSpendValue, isCalcVisible, handleIsCalcVisible, isNeedCalcSpendValue] = useCalculator(defaultSpendValue)
   const [currentInvoice, setCurrentInvoice] = useState(defaultInvoice)
@@ -17,7 +19,6 @@ const AddSpend = ({ handleIsAddSpendVisible, category, defaultSpendValue, defaul
   const [isCalendarVisible, setIsCalendarVisible] = useState(false)
   const [isDateDirty, setIsDateDirty] = useState(false)
 
-
   const addNewOperation = (date) => {
     const obj = {
       sum: spendValue,
@@ -25,7 +26,7 @@ const AddSpend = ({ handleIsAddSpendVisible, category, defaultSpendValue, defaul
       category: currentCategory,
       date: isDateDirty ? date : defaultDate,
       description,
-      id,
+      id
     }
     if (spendValue !== '0' && spendValue.length < 6) {
       onConfirm(obj)
@@ -38,6 +39,11 @@ const AddSpend = ({ handleIsAddSpendVisible, category, defaultSpendValue, defaul
     if (e.target.classList.contains('fixed')) {
       handleIsAddSpendVisible()
     }
+  }
+
+  const handleDuplicate = () => {
+    onDuplicate()
+    handleIsAddSpendVisible()
   }
 
   const handlePayWithVisible = () => {
@@ -116,6 +122,28 @@ const AddSpend = ({ handleIsAddSpendVisible, category, defaultSpendValue, defaul
           isNeedToCalc={isNeedCalcSpendValue}
           defaultDate={defaultDate}
         />
+        {isEditOp && (
+          <div className='-mt-14 w-full flex justify-between items-center text-black pb-14'>
+            <div
+              className='flex items-center mt-3 py-3 px-6 gap-x-3'
+              onClick={onDelete}
+            >
+              <div className='flex-initial'>
+                <DeleteIcon className='fill-red-600 h-6 w-full' />
+              </div>
+              <div className='text-xl font-medium text-red-600'>Delete</div>
+            </div>
+            <div
+              className='flex items-center mt-3 py-3 px-6 gap-x-3'
+              onClick={handleDuplicate}
+            >
+              <div className='flex-initial'>
+                <DuplicateIcon className='fill-gray-600 h-6 w-full' />
+              </div>
+              <div className='text-xl font-medium text-gray-600'>Duplicate</div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   )
